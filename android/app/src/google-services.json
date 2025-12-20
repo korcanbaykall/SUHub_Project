@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "272786057978",
+    "project_id": "suhubapp-b367b",
+    "storage_bucket": "suhubapp-b367b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:272786057978:android:b02ab735e1f928704d3743",
+        "android_client_info": {
+          "package_name": "com.example.suhub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAStQovLbAzqmA87Ee2WK0iv9E5v0Bp9-4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
