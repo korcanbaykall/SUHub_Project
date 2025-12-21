@@ -8,15 +8,14 @@ import 'routes.dart';
 import 'providers/auth_provider.dart';
 import 'providers/posts_provider.dart';
 import 'providers/tab_provider.dart';
+import 'providers/theme_provider.dart';
 
 import 'screens/auth_gate.dart';
 import 'theme/app_colors.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const SUHubApp());
 }
 
@@ -30,16 +29,32 @@ class SUHubApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => PostsProvider()),
         ChangeNotifierProvider(create: (_) => TabProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
-      child: MaterialApp(
-        title: 'SUHub',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: AppColors.primary,
-          useMaterial3: true,
-        ),
-        home: const AuthGate(),
-        routes: AppRoutes.routes,
+      child: Consumer<ThemeProvider>(
+        builder: (_, theme, __) {
+          return MaterialApp(
+            title: 'SUHub',
+            debugShowCheckedModeBanner: false,
+            themeMode: theme.mode,
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: AppColors.primary,
+                brightness: Brightness.light,
+              ),
+              useMaterial3: true,
+            ),
+            darkTheme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: AppColors.primary,
+                brightness: Brightness.dark,
+              ),
+              useMaterial3: true,
+            ),
+            home: const AuthGate(),
+            routes: AppRoutes.routes,
+          );
+        },
       ),
     );
   }

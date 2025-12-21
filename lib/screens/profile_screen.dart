@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import '../providers/auth_provider.dart';
+import '../providers/theme_provider.dart';
 import '../routes.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -58,10 +59,7 @@ class _LoggedOutView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Profile',
-          style: AppTextStyles.appTitle.copyWith(fontSize: 26),
-        ),
+        Text('Profile', style: AppTextStyles.appTitle.copyWith(fontSize: 26)),
         const SizedBox(height: 12),
         Container(
           width: double.infinity,
@@ -108,6 +106,8 @@ class _LoggedInView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = context.watch<ThemeProvider>();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -118,10 +118,7 @@ class _LoggedInView extends StatelessWidget {
               'Profile',
               style: AppTextStyles.appTitle.copyWith(fontSize: 26),
             ),
-            Image.asset(
-              'assets/images/logo.png',
-              height: 48,
-            ),
+            Image.asset('assets/images/logo.png', height: 48),
           ],
         ),
         const SizedBox(height: 18),
@@ -195,6 +192,37 @@ class _LoggedInView extends StatelessWidget {
 
         const SizedBox(height: 18),
 
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(18),
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 10,
+                offset: const Offset(0, 6),
+                color: Colors.black.withOpacity(0.05),
+              ),
+            ],
+          ),
+          child: SwitchListTile.adaptive(
+            value: theme.isDark,
+            onChanged: (v) => context.read<ThemeProvider>().setDark(v),
+            title: const Text(
+              'Dark mode',
+              style: TextStyle(fontWeight: FontWeight.w700),
+            ),
+            subtitle: const Text('Tercih local olarak kaydedilir'),
+            secondary: Icon(
+              theme.isDark ? Icons.dark_mode : Icons.light_mode,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 12),
+
         SizedBox(
           width: double.infinity,
           child: ElevatedButton.icon(
@@ -237,10 +265,7 @@ class _InfoRow extends StatelessWidget {
   final String label;
   final String value;
 
-  const _InfoRow({
-    required this.label,
-    required this.value,
-  });
+  const _InfoRow({required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
