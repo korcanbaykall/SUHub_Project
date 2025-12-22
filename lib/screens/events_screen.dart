@@ -9,6 +9,8 @@ class EventsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final events = <_Event>[
       _Event(
@@ -67,9 +69,16 @@ class EventsScreen extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    Image.asset(
-                      'assets/images/logo.png',
-                      height: 48,
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: isDark ? Colors.black : Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                        height: 60,
+                      ),
                     ),
                   ],
                 ),
@@ -80,7 +89,8 @@ class EventsScreen extends StatelessWidget {
                     hintText: 'Search',
                     prefixIcon: const Icon(Icons.search),
                     filled: true,
-                    fillColor: Colors.white.withOpacity(0.98),
+                    fillColor:
+                        colorScheme.surface.withOpacity(isDark ? 0.9 : 0.98),
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 14,
                       vertical: 12,
@@ -91,9 +101,7 @@ class EventsScreen extends StatelessWidget {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(18),
-                      borderSide: BorderSide(
-                        color: Colors.blue.shade200,
-                      ),
+                      borderSide: BorderSide(color: colorScheme.primary),
                     ),
                   ),
                 ),
@@ -165,12 +173,15 @@ class _EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.95),
+        color: colorScheme.surface.withOpacity(isDark ? 0.93 : 0.95),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.blue.shade200),
+        border: Border.all(color: colorScheme.outline),
       ),
       child: Row(
         children: [
@@ -194,18 +205,18 @@ class _EventCard extends StatelessWidget {
                 children: [
                   Text(
                     event.title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: Colors.black87,
+                      color: colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     event.date,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
-                      color: Colors.black54,
+                      color: colorScheme.onSurfaceVariant,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -220,7 +231,7 @@ class _EventCard extends StatelessWidget {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
+                        backgroundColor: colorScheme.primary,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 18,
                           vertical: 8,
@@ -229,9 +240,9 @@ class _EventCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Details',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: colorScheme.onPrimary),
                       ),
                     ),
                   ),

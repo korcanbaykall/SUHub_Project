@@ -12,6 +12,7 @@ class EventDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final args = ModalRoute.of(context)?.settings.arguments;
     final data = (args is Map<String, dynamic>) ? args : <String, dynamic>{};
@@ -67,9 +68,16 @@ class EventDetailScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Image.asset(
-                      'assets/images/logo.png',
-                      height: 48,
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: isDark ? Colors.black : Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                        height: 60,
+                      ),
                     ),
                   ],
                 ),

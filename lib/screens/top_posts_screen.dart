@@ -91,6 +91,8 @@ class TopPostsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
     final postsProvider = context.watch<PostsProvider>();
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final user = auth.user;
     if (user == null) {
@@ -149,6 +151,8 @@ class TopPostsScreen extends StatelessWidget {
                 return _PostCard(
                   post: p,
                   isOwner: isOwner,
+                  colorScheme: colorScheme,
+                  isDark: isDark,
                   onTap: () {
                     Navigator.pushNamed(
                       context,
@@ -179,11 +183,15 @@ class TopPostsScreen extends StatelessWidget {
 class _PostCard extends StatelessWidget {
   final Post post;
   final bool isOwner;
+  final ColorScheme colorScheme;
+  final bool isDark;
   final VoidCallback onTap;
 
   const _PostCard({
     required this.post,
     required this.isOwner,
+    required this.colorScheme,
+    required this.isDark,
     required this.onTap,
   });
 
@@ -195,13 +203,14 @@ class _PostCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.97),
+          color: colorScheme.surface.withOpacity(isDark ? 0.94 : 0.97),
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
               blurRadius: 10,
               offset: const Offset(0, 6),
-              color: Colors.black.withOpacity(0.08),
+              color:
+                  Theme.of(context).shadowColor.withOpacity(isDark ? 0.3 : 0.08),
             ),
           ],
         ),
@@ -213,14 +222,14 @@ class _PostCard extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 18,
-                  backgroundColor: Colors.black.withOpacity(0.06),
+                  backgroundColor: colorScheme.surfaceVariant,
                   child: Text(
                     post.authorUsername.isNotEmpty
                         ? post.authorUsername[0].toUpperCase()
                         : 'U',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.w800,
-                      color: Colors.black87,
+                      color: colorScheme.onSurface,
                     ),
                   ),
                 ),
@@ -228,24 +237,24 @@ class _PostCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     post.authorUsername,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.w800,
-                      color: Colors.black87,
+                      color: colorScheme.onSurface,
                     ),
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.06),
+                    color: colorScheme.surfaceVariant,
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: Text(
                     post.category,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
-                      color: Colors.black87,
+                      color: colorScheme.onSurface,
                     ),
                   ),
                 ),
@@ -255,8 +264,8 @@ class _PostCard extends StatelessWidget {
 
             Text(
               post.text,
-              style: const TextStyle(
-                color: Colors.black87,
+              style: TextStyle(
+                color: colorScheme.onSurface,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -265,24 +274,45 @@ class _PostCard extends StatelessWidget {
             // Footer stats (UI only for now)
             Row(
               children: [
-                const Icon(Icons.thumb_up_alt_outlined, size: 18),
+                Icon(
+                  Icons.thumb_up_alt_outlined,
+                  size: 18,
+                  color: colorScheme.onSurfaceVariant,
+                ),
                 const SizedBox(width: 4),
-                Text('${post.likes}'),
+                Text(
+                  '${post.likes}',
+                  style: TextStyle(color: colorScheme.onSurfaceVariant),
+                ),
                 const SizedBox(width: 14),
-                const Icon(Icons.thumb_down_alt_outlined, size: 18),
+                Icon(
+                  Icons.thumb_down_alt_outlined,
+                  size: 18,
+                  color: colorScheme.onSurfaceVariant,
+                ),
                 const SizedBox(width: 4),
-                Text('${post.dislikes}'),
+                Text(
+                  '${post.dislikes}',
+                  style: TextStyle(color: colorScheme.onSurfaceVariant),
+                ),
                 const SizedBox(width: 14),
-                const Icon(Icons.chat_bubble_outline, size: 18),
+                Icon(
+                  Icons.chat_bubble_outline,
+                  size: 18,
+                  color: colorScheme.onSurfaceVariant,
+                ),
                 const SizedBox(width: 4),
-                Text('${post.comments}'),
+                Text(
+                  '${post.comments}',
+                  style: TextStyle(color: colorScheme.onSurfaceVariant),
+                ),
                 const Spacer(),
                 if (isOwner)
-                  const Text(
+                  Text(
                     'My post',
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.black54,
+                      color: colorScheme.onSurfaceVariant,
                       fontWeight: FontWeight.w700,
                     ),
                   ),

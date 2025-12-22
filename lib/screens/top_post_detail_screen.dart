@@ -120,6 +120,8 @@ class TopPostDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
     final postsProvider = context.watch<PostsProvider>();
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final user = auth.user;
 
@@ -137,6 +139,8 @@ class TopPostDetailScreen extends StatelessWidget {
         title: const Text('Post Detail'),
       ),
       body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [AppColors.primary, AppColors.secondary],
@@ -173,13 +177,15 @@ class TopPostDetailScreen extends StatelessWidget {
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.97),
+                      color: colorScheme.surface.withOpacity(isDark ? 0.94 : 0.97),
                       borderRadius: BorderRadius.circular(18),
                       boxShadow: [
                         BoxShadow(
                           blurRadius: 10,
                           offset: const Offset(0, 6),
-                          color: Colors.black.withOpacity(0.08),
+                          color: Theme.of(context)
+                              .shadowColor
+                              .withOpacity(isDark ? 0.3 : 0.08),
                         ),
                       ],
                     ),
@@ -191,14 +197,14 @@ class TopPostDetailScreen extends StatelessWidget {
                           children: [
                             CircleAvatar(
                               radius: 20,
-                              backgroundColor: Colors.black.withOpacity(0.06),
+                              backgroundColor: colorScheme.surfaceVariant,
                               child: Text(
                                 post.authorUsername.isNotEmpty
                                     ? post.authorUsername[0].toUpperCase()
                                     : 'U',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontWeight: FontWeight.w800,
-                                  color: Colors.black87,
+                                  color: colorScheme.onSurface,
                                 ),
                               ),
                             ),
@@ -206,9 +212,9 @@ class TopPostDetailScreen extends StatelessWidget {
                             Expanded(
                               child: Text(
                                 post.authorUsername,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontWeight: FontWeight.w800,
-                                  color: Colors.black87,
+                                  color: colorScheme.onSurface,
                                   fontSize: 16,
                                 ),
                               ),
@@ -219,15 +225,15 @@ class TopPostDetailScreen extends StatelessWidget {
                                 vertical: 6,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.06),
+                                color: colorScheme.surfaceVariant,
                                 borderRadius: BorderRadius.circular(999),
                               ),
                               child: Text(
                                 post.category,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700,
-                                  color: Colors.black87,
+                                  color: colorScheme.onSurface,
                                 ),
                               ),
                             ),
@@ -239,30 +245,57 @@ class TopPostDetailScreen extends StatelessWidget {
                         // Content
                         Text(
                           post.text,
-                          style: const TextStyle(
-                            color: Colors.black87,
+                          style: TextStyle(
+                            color: colorScheme.onSurface,
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
                           ),
                         ),
 
                         const SizedBox(height: 16),
-                        const Divider(height: 18),
+                        Divider(
+                          height: 18,
+                          color: colorScheme.outlineVariant,
+                        ),
 
                         // Stats (UI)
                         Row(
                           children: [
-                            const Icon(Icons.thumb_up_alt_outlined, size: 18),
+                            Icon(
+                              Icons.thumb_up_alt_outlined,
+                              size: 18,
+                              color: colorScheme.onSurfaceVariant,
+                            ),
                             const SizedBox(width: 4),
-                            Text('${post.likes}'),
+                            Text(
+                              '${post.likes}',
+                              style:
+                                  TextStyle(color: colorScheme.onSurfaceVariant),
+                            ),
                             const SizedBox(width: 14),
-                            const Icon(Icons.thumb_down_alt_outlined, size: 18),
+                            Icon(
+                              Icons.thumb_down_alt_outlined,
+                              size: 18,
+                              color: colorScheme.onSurfaceVariant,
+                            ),
                             const SizedBox(width: 4),
-                            Text('${post.dislikes}'),
+                            Text(
+                              '${post.dislikes}',
+                              style:
+                                  TextStyle(color: colorScheme.onSurfaceVariant),
+                            ),
                             const SizedBox(width: 14),
-                            const Icon(Icons.chat_bubble_outline, size: 18),
+                            Icon(
+                              Icons.chat_bubble_outline,
+                              size: 18,
+                              color: colorScheme.onSurfaceVariant,
+                            ),
                             const SizedBox(width: 4),
-                            Text('${post.comments}'),
+                            Text(
+                              '${post.comments}',
+                              style:
+                                  TextStyle(color: colorScheme.onSurfaceVariant),
+                            ),
                           ],
                         ),
                       ],
@@ -297,8 +330,8 @@ class TopPostDetailScreen extends StatelessWidget {
                                 ? const Text('Please wait...')
                                 : const Text('Delete'),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.redAccent,
-                              foregroundColor: Colors.white,
+                              backgroundColor: colorScheme.error,
+                              foregroundColor: colorScheme.onError,
                             ),
                           ),
                         ),
@@ -309,12 +342,15 @@ class TopPostDetailScreen extends StatelessWidget {
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.22),
+                        color: colorScheme.surface.withOpacity(isDark ? 0.9 : 0.22),
                         borderRadius: BorderRadius.circular(16),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Only the owner can edit or delete this post.',
-                        style: AppTextStyles.bodyWhite,
+                        style: TextStyle(
+                          color: colorScheme.onSurface,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],

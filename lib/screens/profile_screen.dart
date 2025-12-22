@@ -56,6 +56,8 @@ class ProfileScreen extends StatelessWidget {
 class _LoggedOutView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -65,12 +67,15 @@ class _LoggedOutView extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.22),
+            color: colorScheme.surface.withOpacity(0.85),
             borderRadius: BorderRadius.circular(22),
           ),
-          child: const Text(
+          child: Text(
             'You are not logged in.',
-            style: AppTextStyles.bodyWhite,
+            style: TextStyle(
+              color: colorScheme.onSurface,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
         const SizedBox(height: 12),
@@ -107,6 +112,7 @@ class _LoggedInView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.watch<ThemeProvider>();
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,7 +124,14 @@ class _LoggedInView extends StatelessWidget {
               'Profile',
               style: AppTextStyles.appTitle.copyWith(fontSize: 26),
             ),
-            Image.asset('assets/images/logo.png', height: 48),
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: theme.isDark ? Colors.black : Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: Image.asset('assets/images/logo.png', height: 60),
+            ),
           ],
         ),
         const SizedBox(height: 18),
@@ -127,13 +140,15 @@ class _LoggedInView extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.97),
+            color: colorScheme.surface.withOpacity(theme.isDark ? 0.94 : 0.97),
             borderRadius: BorderRadius.circular(22),
             boxShadow: [
               BoxShadow(
                 blurRadius: 10,
                 offset: const Offset(0, 6),
-                color: Colors.black.withOpacity(0.08),
+                color: Theme.of(context)
+                    .shadowColor
+                    .withOpacity(theme.isDark ? 0.3 : 0.08),
               ),
             ],
           ),
@@ -144,13 +159,13 @@ class _LoggedInView extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 26,
-                    backgroundColor: Colors.black.withOpacity(0.08),
+                    backgroundColor: colorScheme.surfaceVariant,
                     child: Text(
                       username.isNotEmpty ? username[0].toUpperCase() : 'U',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
-                        color: Colors.black87,
+                        color: colorScheme.onSurface,
                       ),
                     ),
                   ),
@@ -161,18 +176,18 @@ class _LoggedInView extends StatelessWidget {
                       children: [
                         Text(
                           username,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w700,
-                            color: Colors.black87,
+                            color: colorScheme.onSurface,
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           email,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 13,
-                            color: Colors.black54,
+                            color: colorScheme.onSurfaceVariant,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -269,14 +284,16 @@ class _InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Row(
       children: [
         Expanded(
           flex: 3,
           child: Text(
             label,
-            style: const TextStyle(
-              color: Colors.black54,
+            style: TextStyle(
+              color: colorScheme.onSurfaceVariant,
               fontWeight: FontWeight.w600,
               fontSize: 12,
             ),
@@ -287,8 +304,8 @@ class _InfoRow extends StatelessWidget {
           child: Text(
             value,
             textAlign: TextAlign.right,
-            style: const TextStyle(
-              color: Colors.black87,
+            style: TextStyle(
+              color: colorScheme.onSurface,
               fontWeight: FontWeight.w700,
               fontSize: 12,
             ),

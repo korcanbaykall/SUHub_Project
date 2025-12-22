@@ -17,6 +17,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       width: size.width,
@@ -35,9 +37,16 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
-                child: Image.asset(
-                  'assets/images/logo.png',
-                  height: 80,
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: isDark ? Colors.black : Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    height: 96,
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
@@ -47,7 +56,8 @@ class HomeScreen extends StatelessWidget {
                   hintText: 'Search',
                   prefixIcon: const Icon(Icons.search),
                   filled: true,
-                  fillColor: Colors.white.withOpacity(0.98),
+                  fillColor:
+                      colorScheme.surface.withOpacity(isDark ? 0.9 : 0.98),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 14,
                     vertical: 12,
@@ -58,7 +68,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(18),
-                    borderSide: BorderSide(color: Colors.blue.shade200),
+                    borderSide: BorderSide(color: colorScheme.primary),
                   ),
                 ),
               ),
@@ -119,16 +129,20 @@ class _ContextCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     final card = Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.97),
+        color: colorScheme.surface.withOpacity(isDark ? 0.94 : 0.97),
         borderRadius: BorderRadius.circular(22),
         boxShadow: [
           BoxShadow(
             blurRadius: 8,
             offset: const Offset(0, 4),
-            color: Colors.black.withOpacity(0.08),
+            color:
+                Theme.of(context).shadowColor.withOpacity(isDark ? 0.3 : 0.08),
           ),
         ],
       ),
@@ -136,9 +150,9 @@ class _ContextCard extends StatelessWidget {
         alignment: Alignment.topLeft,
         child: Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 16,
-            color: Colors.black87,
+            color: colorScheme.onSurface,
             fontWeight: FontWeight.w600,
           ),
         ),

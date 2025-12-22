@@ -58,6 +58,8 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
     final size = MediaQuery.of(context).size;
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       body: Container(
@@ -96,7 +98,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.97),
+                    color: colorScheme.surface.withOpacity(isDark ? 0.94 : 0.97),
                     borderRadius: BorderRadius.circular(22),
                   ),
                   child: Form(
@@ -107,8 +109,17 @@ class _SignupScreenState extends State<SignupScreen> {
                           controller: _usernameController,
                           decoration: InputDecoration(
                             labelText: 'Username',
-                            border: OutlineInputBorder(
+                            filled: true,
+                            fillColor:
+                                colorScheme.surface.withOpacity(isDark ? 0.98 : 1),
+                            labelStyle: TextStyle(color: colorScheme.onSurfaceVariant),
+                            enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide(color: colorScheme.outlineVariant),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide(color: colorScheme.primary),
                             ),
                           ),
                           validator: (v) {
@@ -125,8 +136,17 @@ class _SignupScreenState extends State<SignupScreen> {
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             labelText: 'Email',
-                            border: OutlineInputBorder(
+                            filled: true,
+                            fillColor:
+                                colorScheme.surface.withOpacity(isDark ? 0.98 : 1),
+                            labelStyle: TextStyle(color: colorScheme.onSurfaceVariant),
+                            enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide(color: colorScheme.outlineVariant),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide(color: colorScheme.primary),
                             ),
                           ),
                           validator: (v) {
@@ -143,12 +163,24 @@ class _SignupScreenState extends State<SignupScreen> {
                           obscureText: _obscure,
                           decoration: InputDecoration(
                             labelText: 'Password',
-                            border: OutlineInputBorder(
+                            filled: true,
+                            fillColor:
+                                colorScheme.surface.withOpacity(isDark ? 0.98 : 1),
+                            labelStyle: TextStyle(color: colorScheme.onSurfaceVariant),
+                            enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide(color: colorScheme.outlineVariant),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide(color: colorScheme.primary),
                             ),
                             suffixIcon: IconButton(
                               onPressed: () => setState(() => _obscure = !_obscure),
-                              icon: Icon(_obscure ? Icons.visibility : Icons.visibility_off),
+                              icon: Icon(
+                                _obscure ? Icons.visibility : Icons.visibility_off,
+                                color: colorScheme.onSurfaceVariant,
+                              ),
                             ),
                           ),
                           validator: (v) {
@@ -165,13 +197,15 @@ class _SignupScreenState extends State<SignupScreen> {
                             width: double.infinity,
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: Colors.red.withOpacity(0.10),
+                              color: colorScheme.errorContainer.withOpacity(
+                                isDark ? 0.5 : 0.6,
+                              ),
                               borderRadius: BorderRadius.circular(14),
                             ),
                             child: Text(
                               auth.error!,
-                              style: const TextStyle(
-                                color: Colors.redAccent,
+                              style: TextStyle(
+                                color: colorScheme.onErrorContainer,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
@@ -204,9 +238,9 @@ class _SignupScreenState extends State<SignupScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text(
+                            Text(
                               'Already have an account? ',
-                              style: TextStyle(color: Colors.black54),
+                              style: TextStyle(color: colorScheme.onSurfaceVariant),
                             ),
                             TextButton(
                               onPressed: () {

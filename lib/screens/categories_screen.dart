@@ -28,6 +28,8 @@ class CategoriesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final categories = <String>[
       'Events',
@@ -57,9 +59,16 @@ class CategoriesScreen extends StatelessWidget {
                     'Categories',
                     style: AppTextStyles.appTitle.copyWith(fontSize: 26),
                   ),
-                  Image.asset(
-                    'assets/images/logo.png',
-                    height: 48,
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: isDark ? Colors.black : Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Image.asset(
+                      'assets/images/logo.png',
+                      height: 60,
+                    ),
                   ),
                 ],
               ),
@@ -70,7 +79,8 @@ class CategoriesScreen extends StatelessWidget {
                   hintText: 'Search',
                   prefixIcon: const Icon(Icons.search),
                   filled: true,
-                  fillColor: Colors.white.withOpacity(0.98),
+                  fillColor:
+                      colorScheme.surface.withOpacity(isDark ? 0.9 : 0.98),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 14,
                     vertical: 12,
@@ -81,7 +91,7 @@ class CategoriesScreen extends StatelessWidget {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(18),
-                    borderSide: BorderSide(color: Colors.blue.shade200),
+                    borderSide: BorderSide(color: colorScheme.primary),
                   ),
                 ),
               ),
@@ -91,7 +101,7 @@ class CategoriesScreen extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 6),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.22),
+                  color: colorScheme.surface.withOpacity(isDark ? 0.9 : 0.22),
                   borderRadius: BorderRadius.circular(26),
                 ),
                 child: Column(
@@ -100,31 +110,31 @@ class CategoriesScreen extends StatelessWidget {
                       ListTile(
                         onTap: () => _handleCategoryTap(context, categories[i]),
                         leading: CircleAvatar(
-                          backgroundColor: Colors.white.withOpacity(0.9),
+                          backgroundColor: colorScheme.surfaceVariant,
                           child: Icon(
                             _iconForCategory(categories[i]),
-                            color: Colors.black87,
+                            color: colorScheme.onSurface,
                           ),
                         ),
                         title: Text(
                           categories[i],
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
-                            color: Colors.black87,
+                            color: colorScheme.onSurface,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        trailing: const Icon(
+                        trailing: Icon(
                           Icons.arrow_forward_ios_rounded,
                           size: 16,
-                          color: Colors.black54,
+                          color: colorScheme.onSurfaceVariant,
                         ),
                       ),
                       if (i != categories.length - 1)
-                        const Divider(
+                        Divider(
                           thickness: 0.8,
                           height: 0,
-                          color: Colors.white54,
+                          color: colorScheme.outlineVariant,
                           indent: 16,
                           endIndent: 16,
                         ),

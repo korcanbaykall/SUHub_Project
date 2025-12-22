@@ -9,6 +9,7 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       body: Container(
@@ -30,9 +31,16 @@ class WelcomeScreen extends StatelessWidget {
                 const Spacer(),
 
                 Center(
-                  child: Image.asset(
-                    'assets/images/logo.png',
-                    height: 110,
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: isDark ? Colors.black : Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Image.asset(
+                      'assets/images/logo.png',
+                      height: 130,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
