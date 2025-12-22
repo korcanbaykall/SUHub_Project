@@ -78,6 +78,19 @@ class PostsRepository {
     });
   }
 
+  Future<void> deleteComment({
+    required String postId,
+    required String commentId,
+  }) async {
+    final postRef = _db.collection('posts').doc(postId);
+    final commentRef = postRef.collection('comments').doc(commentId);
+
+    await _db.runTransaction((tx) async {
+      tx.delete(commentRef);
+      tx.update(postRef, {'comments': FieldValue.increment(-1)});
+    });
+  }
+
   Future<void> toggleReaction({
     required String postId,
     required String uid,

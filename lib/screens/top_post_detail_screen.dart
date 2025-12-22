@@ -437,12 +437,34 @@ class TopPostDetailScreen extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      c.authorUsername,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        color: colorScheme.onSurface,
-                                      ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            c.authorUsername,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              color: colorScheme.onSurface,
+                                            ),
+                                          ),
+                                        ),
+                                        if (userId.isNotEmpty &&
+                                            c.createdBy == userId)
+                                          IconButton(
+                                            icon: Icon(
+                                              Icons.delete_outline,
+                                              size: 18,
+                                              color: colorScheme.error,
+                                            ),
+                                            onPressed: () async {
+                                              await postsProvider.deleteComment(
+                                                postId: post.id,
+                                                commentId: c.id,
+                                              );
+                                              if (context.mounted) showError();
+                                            },
+                                          ),
+                                      ],
                                     ),
                                     const SizedBox(height: 6),
                                     Text(

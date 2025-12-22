@@ -104,6 +104,24 @@ class PostsProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> deleteComment({
+    required String postId,
+    required String commentId,
+  }) async {
+    _busy = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      await _repo.deleteComment(postId: postId, commentId: commentId);
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _busy = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> toggleReaction({
     required String postId,
     required String uid,
