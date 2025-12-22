@@ -18,67 +18,21 @@ class TopPostsScreen extends StatelessWidget {
     final user = auth.user!;
     final username = auth.profile?.username ?? (user.email ?? 'user');
 
-    final textController = TextEditingController();
-    String category = 'General';
-
     final created = await showDialog<bool>(
       context: context,
-      builder: (ctx) {
-        return AlertDialog(
-          title: const Text('Create Post'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: textController,
-                maxLines: 3,
-                decoration: const InputDecoration(
-                  labelText: 'Text',
-                  hintText: 'Write something...',
-                ),
-              ),
-              const SizedBox(height: 10),
-              DropdownButtonFormField<String>(
-                value: category,
-                items: const [
-                  DropdownMenuItem(value: 'General', child: Text('General')),
-                  DropdownMenuItem(value: 'Campus', child: Text('Campus')),
-                  DropdownMenuItem(value: 'Clubs', child: Text('Clubs')),
-                  DropdownMenuItem(value: 'Midterms', child: Text('Midterms')),
-                ],
-                onChanged: (v) => category = v ?? 'General',
-                decoration: const InputDecoration(labelText: 'Category'),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                final text = textController.text.trim();
-                if (text.isEmpty) return;
-
-                await posts.createPost(
-                  text: text,
-                  category: category,
-                  createdBy: user.uid,
-                  authorUsername: username,
-                );
-
-                if (ctx.mounted) Navigator.pop(ctx, true);
-              },
-              child: const Text('Create'),
-            ),
-          ],
-        );
-      },
+      builder: (_) => _CreatePostDialog(
+        onCreate: (text, category) async {
+          await posts.createPost(
+            text: text,
+            category: category,
+            createdBy: user.uid,
+            authorUsername: username,
+          );
+        },
+      ),
     );
 
-    textController.dispose();
-
+    if (!context.mounted) return;
     if (created == true && posts.error != null) {
       // Provider error (rare)
       ScaffoldMessenger.of(context).showSnackBar(
@@ -153,6 +107,7 @@ class TopPostsScreen extends StatelessWidget {
                   isOwner: isOwner,
                   colorScheme: colorScheme,
                   isDark: isDark,
+                  userId: user.uid,
                   onTap: () {
                     Navigator.pushNamed(
                       context,
@@ -185,6 +140,7 @@ class _PostCard extends StatelessWidget {
   final bool isOwner;
   final ColorScheme colorScheme;
   final bool isDark;
+  final String userId;
   final VoidCallback onTap;
 
   const _PostCard({
@@ -192,6 +148,7 @@ class _PostCard extends StatelessWidget {
     required this.isOwner,
     required this.colorScheme,
     required this.isDark,
+    required this.userId,
     required this.onTap,
   });
 
@@ -321,6 +278,79 @@ class _PostCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _CreatePostDialog extends StatefulWidget {
+  final Future<void> Function(String text, String category) onCreate;
+
+  const _CreatePostDialog({required this.onCreate});
+
+  @override
+  State<_CreatePostDialog> createState() => _CreatePostDialogState();
+}
+
+class _CreatePostDialogState extends State<_CreatePostDialog> {
+  final TextEditingController _textController = TextEditingController();
+  String _category = 'General';
+  bool _saving = false;
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleCreate() async {
+    final text = _textController.text.trim();
+    if (text.isEmpty || _saving) return;
+
+    setState(() => _saving = true);
+    await widget.onCreate(text, _category);
+    if (!mounted) return;
+    Navigator.of(context).pop(true);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Create Post'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            controller: _textController,
+            maxLines: 3,
+            decoration: const InputDecoration(
+              labelText: 'Text',
+              hintText: 'Write something...',
+            ),
+          ),
+          const SizedBox(height: 10),
+          DropdownButtonFormField<String>(
+            value: _category,
+            items: const [
+              DropdownMenuItem(value: 'General', child: Text('General')),
+              DropdownMenuItem(value: 'Campus', child: Text('Campus')),
+              DropdownMenuItem(value: 'Clubs', child: Text('Clubs')),
+              DropdownMenuItem(value: 'Midterms', child: Text('Midterms')),
+            ],
+            onChanged: (v) => setState(() => _category = v ?? 'General'),
+            decoration: const InputDecoration(labelText: 'Category'),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: _saving ? null : () => Navigator.pop(context, false),
+          child: const Text('Cancel'),
+        ),
+        ElevatedButton(
+          onPressed: _saving ? null : _handleCreate,
+          child: Text(_saving ? 'Please wait...' : 'Create'),
+        ),
+      ],
     );
   }
 }

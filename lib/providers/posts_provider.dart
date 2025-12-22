@@ -15,6 +15,10 @@ class PostsProvider extends ChangeNotifier {
 
   Stream<List<Post>> postsStream() => _repo.streamPosts();
   Stream<Post> postStream(String id) => _repo.streamPost(id);
+  Stream<String?> reactionStream(String postId, String uid) =>
+      _repo.streamReaction(postId, uid);
+  Stream<List<Map<String, dynamic>>> commentsStream(String postId) =>
+      _repo.streamComments(postId);
 
   Future<void> createPost({
     required String text,
@@ -67,6 +71,50 @@ class PostsProvider extends ChangeNotifier {
 
     try {
       await _repo.deletePost(id);
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _busy = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> addComment({
+    required String postId,
+    required String text,
+    required String createdBy,
+    required String authorUsername,
+  }) async {
+    _busy = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      await _repo.addComment(
+        postId: postId,
+        text: text,
+        createdBy: createdBy,
+        authorUsername: authorUsername,
+      );
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _busy = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> toggleReaction({
+    required String postId,
+    required String uid,
+    required String type,
+  }) async {
+    _busy = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      await _repo.toggleReaction(postId: postId, uid: uid, type: type);
     } catch (e) {
       _error = e.toString();
     } finally {
