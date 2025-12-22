@@ -73,11 +73,6 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 18),
-
-              const Text(
-                'day/month/year',
-                style: AppTextStyles.bodyWhite,
-              ),
               const SizedBox(height: 4),
               const Text(
                 'TOP CONTEXTS',
