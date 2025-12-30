@@ -42,3 +42,7 @@ This category highlights both university organized and student-led events, inclu
 | Korcan Baykal | 32225 | Learning & Research Lead |
 | Aslı Koturoğlu | 32363 | Documentation & Submission Lead |
 | Işık Giray Onal | 34088 | I​​ntegration & Repository Lead |
+
+## Tests
+- `test/posts_provider_test.dart`: unit-tests `PostsProvider.createPost` busy/error state changes and ensures the repository call is invoked.
+- `test/welcome_screen_test.dart`: widget-tests that the welcome screen shows its title/buttons and that tapping “Sign In” navigates to the sign-in route.
