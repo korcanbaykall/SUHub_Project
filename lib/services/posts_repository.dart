@@ -13,6 +13,24 @@ class PostsRepository {
         .map((snap) => snap.docs.map((d) => Post.fromDoc(d)).toList());
   }
 
+  Stream<List<Post>> streamTopPosts() {
+    return _db
+        .collection('posts')
+        .snapshots()
+        .map((snap) {
+      final posts =
+      snap.docs.map((d) => Post.fromDoc(d)).toList();
+
+      posts.sort((a, b) {
+        final scoreA = a.likes + a.comments;
+        final scoreB = b.likes + b.comments;
+        return scoreB.compareTo(scoreA); // büyükten küçüğe
+      });
+
+      return posts;
+    });
+  }
+
   Stream<Post> streamPost(String id) {
     return _db.collection('posts').doc(id).snapshots().map((doc) => Post.fromDoc(doc));
   }

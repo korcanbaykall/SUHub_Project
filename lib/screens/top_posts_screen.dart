@@ -70,7 +70,7 @@ class TopPostsScreen extends StatelessWidget {
           ),
         ),
         child: StreamBuilder<List<Post>>(
-          stream: postsProvider.postsStream(),
+          stream: postsProvider.topPostsStream(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Center(

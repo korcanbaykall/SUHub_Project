@@ -27,6 +27,10 @@ class PostsProvider extends ChangeNotifier {
     return _repo.postsByCategoryStream(category);
   }
 
+  Stream<List<Post>> topPostsStream() {
+    return _repo.streamTopPosts();
+  }
+
   Future<void> createPost({
     required String text,
     required String category,
