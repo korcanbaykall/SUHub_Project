@@ -4,6 +4,8 @@ import '../theme/app_text_styles.dart';
 import '../routes.dart';
 import 'generic_category_screen.dart';
 import '../models/post.dart';
+import 'search_results_screen.dart';
+
 
 class CategoriesScreen extends StatelessWidget {
 
@@ -124,6 +126,17 @@ class CategoriesScreen extends StatelessWidget {
                     borderSide: BorderSide(color: colorScheme.primary),
                   ),
                 ),
+                onSubmitted: (query) {
+                  final q = query.trim();
+                  if (q.isEmpty) return;
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => SearchResultsScreen(query: q),
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 18),
 
