@@ -23,8 +23,6 @@ class _CreatePostDialogState extends State<CreatePostDialog> {
   bool _submitting = false;
 
   final List<String> _categories = const [
-  'Events',
-  'Top Posts of Today',
   'Student Clubs',
   'Academic Courses',
   'Dining Options',

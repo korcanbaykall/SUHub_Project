@@ -11,6 +11,7 @@ import 'screens/top_posts_screen.dart';
 import 'screens/top_post_detail_screen.dart';
 
 import 'screens/category_post_detail_screen.dart';
+import 'screens/generic_category_screen.dart';
 
 class AppRoutes {
   // Auth / entry
@@ -19,6 +20,8 @@ class AppRoutes {
   static const String signin = '/signin';
 
   // Feature routes
+  static const home = '/';
+
   static const String events = '/events';
   static const String eventDetail = '/event_detail';
 
@@ -26,6 +29,7 @@ class AppRoutes {
   static const String topPostDetail = '/top_post_detail';
 
   static const String categoryPostDetail = '/category_post_detail';
+  static const genericCategory = '/generic-category';
 
 
   static Map<String, WidgetBuilder> routes = {
@@ -40,5 +44,6 @@ class AppRoutes {
     topPostDetail: (_) => const TopPostDetailScreen(),
 
     categoryPostDetail: (_) => const CategoryPostDetailScreen(),
+    genericCategory: (context) => const GenericCategoryScreen(),
   };
 }

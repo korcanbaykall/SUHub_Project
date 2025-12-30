@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/auth_provider.dart';
+import '../providers/posts_provider.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import '../routes.dart';
+import '../widgets/create_post_dialog.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -95,14 +100,57 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   _ContextCard(
                     title: 'Top Posts of Today',
+                    icon: Icons.trending_up,
                     onTap: () => _handleCardTap(context, 'Top Posts of Today'),
                   ),
                   _ContextCard(
                     title: "Student Clubs’ Events",
+                    icon: Icons.groups,
                     onTap: () => _handleCardTap(context, "Student Clubs’ Events"),
                   ),
-                  const _ContextCard(title: 'Midterms Are Coming'),
-                  const _ContextCard(title: 'University Center'),
+                  _ContextCard(
+                    title: 'Finals Are Coming!',
+                    icon: Icons.menu_book,
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        AppRoutes.genericCategory,
+                        arguments: {
+                          'title': 'Academic Courses',
+                          'icon': Icons.menu_book,
+                        },
+                      );
+                    },
+                  ),
+
+                  _ContextCard(
+                    title: 'Create Post',
+                    icon: Icons.add_circle_outline,
+                    onTap: () {
+                      final auth = context.read<AuthProvider>();
+                      final posts = context.read<PostsProvider>();
+                      final user = auth.user;
+
+                      if (user == null) return;
+
+                      final username =
+                          auth.profile?.username ?? user.email ?? 'user';
+
+                      showDialog(
+                        context: context,
+                        builder: (_) => CreatePostDialog(
+                          onCreate: (text, category) async {
+                            await posts.createPost(
+                              text: text,
+                              category: category,
+                              createdBy: user.uid,
+                              authorUsername: username,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             ],
@@ -115,10 +163,12 @@ class HomeScreen extends StatelessWidget {
 
 class _ContextCard extends StatelessWidget {
   final String title;
+  final IconData icon;
   final VoidCallback? onTap;
 
   const _ContextCard({
     required this.title,
+    required this.icon,
     this.onTap,
   });
 
@@ -136,21 +186,33 @@ class _ContextCard extends StatelessWidget {
           BoxShadow(
             blurRadius: 8,
             offset: const Offset(0, 4),
-            color:
-                Theme.of(context).shadowColor.withOpacity(isDark ? 0.3 : 0.08),
+            color: Theme.of(context)
+                .shadowColor
+                .withOpacity(isDark ? 0.3 : 0.08),
           ),
         ],
       ),
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: Text(
-          title,
-          style: TextStyle(
-            fontSize: 16,
-            color: colorScheme.onSurface,
-            fontWeight: FontWeight.w600,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 16,
+              color: colorScheme.onSurface,
+              fontWeight: FontWeight.w600,
+            ),
           ),
-        ),
+
+          const Spacer(),
+
+          Icon(
+            icon,
+            size: 30,
+            color: colorScheme.primary.withOpacity(0.85),
+          ),
+        ],
       ),
     );
 

@@ -10,17 +10,15 @@ import '../theme/app_text_styles.dart';
 import '../widgets/create_post_dialog.dart';
 
 class GenericCategoryScreen extends StatelessWidget {
-  final String title;
-  final IconData icon;
-
-  const GenericCategoryScreen({
-    super.key,
-    required this.title,
-    required this.icon,
-  });
+  const GenericCategoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
+    final String title = args['title'];
+    final IconData icon = args['icon'];
+
     final postsProvider = context.watch<PostsProvider>();
     final auth = context.watch<AuthProvider>();
 

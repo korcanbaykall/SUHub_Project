@@ -11,60 +11,52 @@ class CategoriesScreen extends StatelessWidget {
     {
       'title': 'Events',
       'icon': Icons.event,
-      'route': AppRoutes.events, // özel
+      'route': AppRoutes.events,
     },
     {
       'title': 'Top Posts of Today',
       'icon': Icons.trending_up,
-      'route': AppRoutes.topPosts, // özel
+      'route': AppRoutes.topPosts,
     },
     {
       'title': 'Student Clubs',
       'icon': Icons.groups,
-      'page': (BuildContext context) =>
-      const GenericCategoryScreen(title: 'Student Clubs', icon: Icons.groups),
+      'route': AppRoutes.genericCategory,
     },
     {
       'title': 'Academic Courses',
       'icon': Icons.menu_book,
-      'page': (BuildContext context) => const GenericCategoryScreen(
-          title: 'Academic Courses', icon: Icons.menu_book),
+      'route': AppRoutes.genericCategory,
     },
     {
       'title': 'Dining Options',
       'icon': Icons.restaurant,
-      'page': (BuildContext context) => const GenericCategoryScreen(
-          title: 'Dining Options', icon: Icons.restaurant),
+      'route': AppRoutes.genericCategory,
     },
     {
       'title': 'Transportation Services',
       'icon': Icons.directions_bus,
-      'page': (BuildContext context) => const GenericCategoryScreen(
-          title: 'Transportation Services', icon: Icons.directions_bus),
+      'route': AppRoutes.genericCategory,
     },
     {
       'title': 'Dormitories',
       'icon': Icons.apartment,
-      'page': (BuildContext context) => const GenericCategoryScreen(
-          title: 'Dormitories', icon: Icons.apartment),
+      'route': AppRoutes.genericCategory,
     },
     {
       'title': 'Campus Facilities',
       'icon': Icons.location_city,
-      'page': (BuildContext context) => const GenericCategoryScreen(
-          title: 'Campus Facilities', icon: Icons.location_city),
+      'route': AppRoutes.genericCategory,
     },
     {
       'title': 'Social Activities',
       'icon': Icons.celebration,
-      'page': (BuildContext context) => const GenericCategoryScreen(
-          title: 'Social Activities', icon: Icons.celebration),
+      'route': AppRoutes.genericCategory,
     },
     {
       'title': 'Other',
       'icon': Icons.more_horiz,
-      'page': (BuildContext context) =>
-      const GenericCategoryScreen(title: 'Other', icon: Icons.more_horiz),
+      'route': AppRoutes.genericCategory,
     },
   ];
 
@@ -156,16 +148,14 @@ class CategoriesScreen extends StatelessWidget {
                   itemBuilder: (context, i) {
                     return ListTile(
                       onTap: () {
-                        if (categories[i].containsKey('route')) {
-                          Navigator.pushNamed(context, categories[i]['route']);
-                        } else {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: categories[i]['page'],
-                            ),
-                          );
-                        }
+                        Navigator.pushNamed(
+                          context,
+                          AppRoutes.genericCategory,
+                          arguments: {
+                            'title': 'Student Clubs',
+                            'icon': Icons.groups,
+                          },
+                        );
                       },
 
                       leading: CircleAvatar(
