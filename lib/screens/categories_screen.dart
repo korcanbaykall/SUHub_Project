@@ -2,39 +2,77 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import '../routes.dart';
+import 'generic_category_screen.dart';
+import '../models/post.dart';
 
 class CategoriesScreen extends StatelessWidget {
-  const CategoriesScreen({super.key});
 
-  IconData _iconForCategory(String category) {
-    switch (category) {
-      case 'Events':
-        return Icons.event;
-      case 'Top Posts of Today':
-        return Icons.trending_up;
-      default:
-        return Icons.category;
-    }
-  }
-
-  void _handleCategoryTap(BuildContext context, String category) {
-    if (category == 'Events') {
-      Navigator.pushNamed(context, AppRoutes.events);
-    } else if (category == 'Top Posts of Today') {
-      Navigator.pushNamed(context, AppRoutes.topPosts);
-    }
-  }
+  final categories = <Map<String, dynamic>>[
+    {
+      'title': 'Events',
+      'icon': Icons.event,
+      'route': AppRoutes.events, // özel
+    },
+    {
+      'title': 'Top Posts of Today',
+      'icon': Icons.trending_up,
+      'route': AppRoutes.topPosts, // özel
+    },
+    {
+      'title': 'Student Clubs',
+      'icon': Icons.groups,
+      'page': (BuildContext context) =>
+      const GenericCategoryScreen(title: 'Student Clubs', icon: Icons.groups),
+    },
+    {
+      'title': 'Academic Courses',
+      'icon': Icons.menu_book,
+      'page': (BuildContext context) => const GenericCategoryScreen(
+          title: 'Academic Courses', icon: Icons.menu_book),
+    },
+    {
+      'title': 'Dining Options',
+      'icon': Icons.restaurant,
+      'page': (BuildContext context) => const GenericCategoryScreen(
+          title: 'Dining Options', icon: Icons.restaurant),
+    },
+    {
+      'title': 'Transportation Services',
+      'icon': Icons.directions_bus,
+      'page': (BuildContext context) => const GenericCategoryScreen(
+          title: 'Transportation Services', icon: Icons.directions_bus),
+    },
+    {
+      'title': 'Dormitories',
+      'icon': Icons.apartment,
+      'page': (BuildContext context) => const GenericCategoryScreen(
+          title: 'Dormitories', icon: Icons.apartment),
+    },
+    {
+      'title': 'Campus Facilities',
+      'icon': Icons.location_city,
+      'page': (BuildContext context) => const GenericCategoryScreen(
+          title: 'Campus Facilities', icon: Icons.location_city),
+    },
+    {
+      'title': 'Social Activities',
+      'icon': Icons.celebration,
+      'page': (BuildContext context) => const GenericCategoryScreen(
+          title: 'Social Activities', icon: Icons.celebration),
+    },
+    {
+      'title': 'Other',
+      'icon': Icons.more_horiz,
+      'page': (BuildContext context) =>
+      const GenericCategoryScreen(title: 'Other', icon: Icons.more_horiz),
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    final categories = <String>[
-      'Events',
-      'Top Posts of Today',
-    ];
 
     return Container(
       width: size.width,
@@ -104,42 +142,54 @@ class CategoriesScreen extends StatelessWidget {
                   color: colorScheme.surface.withOpacity(isDark ? 0.9 : 0.22),
                   borderRadius: BorderRadius.circular(26),
                 ),
-                child: Column(
-                  children: [
-                    for (int i = 0; i < categories.length; i++) ...[
-                      ListTile(
-                        onTap: () => _handleCategoryTap(context, categories[i]),
-                        leading: CircleAvatar(
-                          backgroundColor: colorScheme.surfaceVariant,
-                          child: Icon(
-                            _iconForCategory(categories[i]),
-                            color: colorScheme.onSurface,
-                          ),
-                        ),
-                        title: Text(
-                          categories[i],
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: colorScheme.onSurface,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        trailing: Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          size: 16,
-                          color: colorScheme.onSurfaceVariant,
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: categories.length,
+                  separatorBuilder: (context, index) => Divider(
+                    thickness: 0.8,
+                    height: 0,
+                    color: colorScheme.outlineVariant,
+                    indent: 16,
+                    endIndent: 16,
+                  ),
+                  itemBuilder: (context, i) {
+                    return ListTile(
+                      onTap: () {
+                        if (categories[i].containsKey('route')) {
+                          Navigator.pushNamed(context, categories[i]['route']);
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: categories[i]['page'],
+                            ),
+                          );
+                        }
+                      },
+
+                      leading: CircleAvatar(
+                        backgroundColor: colorScheme.surfaceVariant,
+                        child: Icon(
+                          categories[i]['icon'],
+                          color: colorScheme.onSurface,
                         ),
                       ),
-                      if (i != categories.length - 1)
-                        Divider(
-                          thickness: 0.8,
-                          height: 0,
-                          color: colorScheme.outlineVariant,
-                          indent: 16,
-                          endIndent: 16,
+                      title: Text(
+                        categories[i]['title'],
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: colorScheme.onSurface,
+                          fontWeight: FontWeight.w600,
                         ),
-                    ],
-                  ],
+                      ),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 16,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    );
+                  },
                 ),
               ),
             ],

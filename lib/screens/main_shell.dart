@@ -16,7 +16,7 @@ class MainShell extends StatelessWidget {
     return Scaffold(
       body: IndexedStack(
         index: tab.index,
-        children: const [
+        children:  [
           CategoriesScreen(),
           HomeScreen(),
           ProfileScreen(),

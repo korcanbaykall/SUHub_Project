@@ -400,7 +400,7 @@ class TopPostDetailScreen extends StatelessWidget {
                   const SizedBox(height: 12),
 
                   StreamBuilder<List<Map<String, dynamic>>>(
-                    stream: postsProvider.commentsStream(post.id),
+                    stream: postsProvider.streamComments(post.id),
                     builder: (context, commentSnap) {
                       if (!commentSnap.hasData) {
                         return const SizedBox.shrink();
@@ -631,10 +631,13 @@ class _EditPostDialogState extends State<_EditPostDialog> {
           DropdownButtonFormField<String>(
             value: _category,
             items: const [
-              DropdownMenuItem(value: 'General', child: Text('General')),
-              DropdownMenuItem(value: 'Campus', child: Text('Campus')),
-              DropdownMenuItem(value: 'Clubs', child: Text('Clubs')),
-              DropdownMenuItem(value: 'Midterms', child: Text('Midterms')),
+                DropdownMenuItem(value: 'Dormitories', child: Text('Dormitories')),
+                DropdownMenuItem(value: 'Dining Options', child: Text('Dining Options')),
+                DropdownMenuItem(value: 'Transportation Services', child: Text('Transportation Services')),
+                DropdownMenuItem(value: 'Campus Facilities', child: Text('Campus Facilities')),
+                DropdownMenuItem(value: 'Student Clubs', child: Text('Student Clubs')),
+                DropdownMenuItem(value: 'Social Activities', child: Text('Social Activities')),
+                DropdownMenuItem(value: 'Other', child: Text('Other')),
             ],
             onChanged: (v) => setState(() => _category = v ?? _category),
             decoration: const InputDecoration(labelText: 'Category'),

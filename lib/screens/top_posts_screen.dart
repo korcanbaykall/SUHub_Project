@@ -7,6 +7,7 @@ import '../providers/posts_provider.dart';
 import '../routes.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
+import '../widgets/create_post_dialog.dart';
 
 class TopPostsScreen extends StatelessWidget {
   const TopPostsScreen({super.key});
@@ -20,7 +21,7 @@ class TopPostsScreen extends StatelessWidget {
 
     final created = await showDialog<bool>(
       context: context,
-      builder: (_) => _CreatePostDialog(
+      builder: (_) => CreatePostDialog(
         onCreate: (text, category) async {
           await posts.createPost(
             text: text,
@@ -328,15 +329,20 @@ class _CreatePostDialogState extends State<_CreatePostDialog> {
             ),
           ),
           const SizedBox(height: 10),
+
           DropdownButtonFormField<String>(
             value: _category,
             items: const [
-              DropdownMenuItem(value: 'General', child: Text('General')),
-              DropdownMenuItem(value: 'Campus', child: Text('Campus')),
-              DropdownMenuItem(value: 'Clubs', child: Text('Clubs')),
-              DropdownMenuItem(value: 'Midterms', child: Text('Midterms')),
+              DropdownMenuItem(value: 'Dormitories', child: Text('Dormitories')),
+              DropdownMenuItem(value: 'Dining Options', child: Text('Dining Options')),
+              DropdownMenuItem(value: 'Transportation Services', child: Text('Transportation Services')),
+              DropdownMenuItem(value: 'Student Clubs', child: Text('Student Clubs')),
+              DropdownMenuItem(value: 'Academic Courses', child: Text('Academic Courses')),
+              DropdownMenuItem(value: 'Campus Facilities', child: Text('Campus Facilities')),
+              DropdownMenuItem(value: 'Social Activities', child: Text('Social Activities')),
+              DropdownMenuItem(value: 'Other', child: Text('Other')),
             ],
-            onChanged: (v) => setState(() => _category = v ?? 'General'),
+            onChanged: (v) => setState(() => _category = v!),
             decoration: const InputDecoration(labelText: 'Category'),
           ),
         ],

@@ -14,11 +14,18 @@ class PostsProvider extends ChangeNotifier {
   String? get error => _error;
 
   Stream<List<Post>> postsStream() => _repo.streamPosts();
+
   Stream<Post> postStream(String id) => _repo.streamPost(id);
+
   Stream<String?> reactionStream(String postId, String uid) =>
       _repo.streamReaction(postId, uid);
-  Stream<List<Map<String, dynamic>>> commentsStream(String postId) =>
+
+  Stream<List<Map<String, dynamic>>> streamComments(String postId) =>
       _repo.streamComments(postId);
+
+  Stream<List<Post>> postsByCategoryStream(String category) {
+    return _repo.postsByCategoryStream(category);
+  }
 
   Future<void> createPost({
     required String text,

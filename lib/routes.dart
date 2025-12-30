@@ -10,6 +10,8 @@ import 'screens/event_detail_screen.dart';
 import 'screens/top_posts_screen.dart';
 import 'screens/top_post_detail_screen.dart';
 
+import 'screens/category_post_detail_screen.dart';
+
 class AppRoutes {
   // Auth / entry
   static const String welcome = '/welcome';
@@ -23,6 +25,9 @@ class AppRoutes {
   static const String topPosts = '/top_posts';
   static const String topPostDetail = '/top_post_detail';
 
+  static const String categoryPostDetail = '/category_post_detail';
+
+
   static Map<String, WidgetBuilder> routes = {
     welcome: (_) => const WelcomeScreen(),
     signup: (_) => const SignupScreen(),
@@ -33,5 +38,7 @@ class AppRoutes {
 
     topPosts: (_) => const TopPostsScreen(),
     topPostDetail: (_) => const TopPostDetailScreen(),
+
+    categoryPostDetail: (_) => const CategoryPostDetailScreen(),
   };
 }

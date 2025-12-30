@@ -37,6 +37,14 @@ class PostsRepository {
         .map((snap) => snap.docs.map((d) => d.data()).toList());
   }
 
+  Stream<List<Post>> postsByCategoryStream(String category) {
+    return streamPosts().map(
+          (posts) =>
+          posts.where((p) => p.category == category).toList(),
+    );
+  }
+
+
   Future<void> createPost({
     required String text,
     required String category,
