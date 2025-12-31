@@ -118,7 +118,7 @@ class EventsScreen extends StatelessWidget {
                         Icon(Icons.arrow_back, color: Colors.white, size: 20),
                         SizedBox(width: 4),
                         Text(
-                          'Geri',
+                          'Back',
                           style: AppTextStyles.bodyWhite,
                         ),
                       ],
@@ -227,7 +227,7 @@ class _EventCard extends StatelessWidget {
                         Navigator.pushNamed(
                           context,
                           AppRoutes.eventDetail,
-                          arguments: event.toMap(), // ✅ sadece bunu ekledik
+                          arguments: event.toMap(),
                         );
                       },
                       style: ElevatedButton.styleFrom(

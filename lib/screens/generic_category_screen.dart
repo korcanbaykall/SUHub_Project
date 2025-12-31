@@ -8,6 +8,7 @@ import '../routes.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import '../widgets/create_post_dialog.dart';
+import '../constants/post_categories.dart';
 
 class GenericCategoryScreen extends StatelessWidget {
   const GenericCategoryScreen({super.key});
@@ -16,8 +17,10 @@ class GenericCategoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
-    final String title = args['title'];
+    final String categoryKey = args['categoryKey'];
+    final String title = PostCategories.titles[categoryKey]!;
     final IconData icon = args['icon'];
+    final categoryTitle = PostCategories.titles[categoryKey]!;
 
     final postsProvider = context.watch<PostsProvider>();
     final auth = context.watch<AuthProvider>();
@@ -41,11 +44,11 @@ class GenericCategoryScreen extends StatelessWidget {
           showDialog(
             context: context,
             builder: (_) => CreatePostDialog(
-              presetCategory: title,
-              onCreate: (text, category) async {
+              presetCategory: categoryTitle,
+              onCreate: (text, _) async {
                 await postsProvider.createPost(
                   text: text,
-                  category: category,
+                  category: categoryTitle,
                   createdBy: user.uid,
                   authorUsername: username,
                 );
@@ -67,7 +70,7 @@ class GenericCategoryScreen extends StatelessWidget {
           ),
         ),
         child: StreamBuilder<List<Post>>(
-          stream: postsProvider.postsByCategoryStream(title),
+          stream: postsProvider.postsByCategoryStream(categoryTitle),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Center(
@@ -152,7 +155,6 @@ class GenericCategoryScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // HEADER
                         Row(
                           children: [
                             CircleAvatar(

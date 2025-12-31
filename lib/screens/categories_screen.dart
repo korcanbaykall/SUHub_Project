@@ -5,6 +5,7 @@ import '../routes.dart';
 import 'generic_category_screen.dart';
 import '../models/post.dart';
 import 'search_results_screen.dart';
+import '../constants/post_categories.dart';
 
 
 class CategoriesScreen extends StatelessWidget {
@@ -14,51 +15,61 @@ class CategoriesScreen extends StatelessWidget {
       'title': 'Events',
       'icon': Icons.event,
       'route': AppRoutes.events,
+      'categoryKey': PostCategories.events,
     },
     {
       'title': 'Top Posts of Today',
       'icon': Icons.trending_up,
       'route': AppRoutes.topPosts,
+      'categoryKey': PostCategories.topPosts,
     },
     {
       'title': 'Student Clubs',
       'icon': Icons.groups,
       'route': AppRoutes.genericCategory,
+      'categoryKey': PostCategories.studentClubs,
     },
     {
       'title': 'Academic Courses',
       'icon': Icons.menu_book,
       'route': AppRoutes.genericCategory,
+      'categoryKey': PostCategories.academicCourses,
     },
     {
       'title': 'Dining Options',
       'icon': Icons.restaurant,
       'route': AppRoutes.genericCategory,
+      'categoryKey': PostCategories.dining,
     },
     {
       'title': 'Transportation Services',
       'icon': Icons.directions_bus,
       'route': AppRoutes.genericCategory,
+      'categoryKey': PostCategories.transportation,
     },
     {
       'title': 'Dormitories',
       'icon': Icons.apartment,
       'route': AppRoutes.genericCategory,
+      'categoryKey': PostCategories.dormitories,
     },
     {
       'title': 'Campus Facilities',
       'icon': Icons.location_city,
       'route': AppRoutes.genericCategory,
+      'categoryKey': PostCategories.facilities,
     },
     {
       'title': 'Social Activities',
       'icon': Icons.celebration,
       'route': AppRoutes.genericCategory,
+      'categoryKey': PostCategories.social,
     },
     {
       'title': 'Other',
       'icon': Icons.more_horiz,
       'route': AppRoutes.genericCategory,
+      'categoryKey': PostCategories.other,
     },
   ];
 
@@ -159,16 +170,24 @@ class CategoriesScreen extends StatelessWidget {
                     endIndent: 16,
                   ),
                   itemBuilder: (context, i) {
+                    final item = categories[i];
                     return ListTile(
                       onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          AppRoutes.genericCategory,
-                          arguments: {
-                            'title': 'Student Clubs',
-                            'icon': Icons.groups,
-                          },
-                        );
+                        final route = item['route'];
+
+                        if (route == AppRoutes.genericCategory) {
+                          Navigator.pushNamed(
+                            context,
+                            AppRoutes.genericCategory,
+                            arguments: {
+                              'title': item['title'],
+                              'icon': item['icon'],
+                              'categoryKey': item['categoryKey'],
+                            },
+                          );
+                        } else {
+                          Navigator.pushNamed(context, route);
+                        }
                       },
 
                       leading: CircleAvatar(
