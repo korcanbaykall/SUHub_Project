@@ -24,7 +24,7 @@ class PostsRepository {
       posts.sort((a, b) {
         final scoreA = a.likes + a.comments;
         final scoreB = b.likes + b.comments;
-        return scoreB.compareTo(scoreA); // büyükten küçüğe
+        return scoreB.compareTo(scoreA);
       });
 
       return posts;

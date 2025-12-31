@@ -10,6 +10,9 @@ class AuthProvider extends ChangeNotifier {
   final AuthService _authService;
   final UserRepository _userRepo;
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  User? get user => _auth.currentUser;
   User? _user;
   UserProfile? _profile;
 
@@ -44,7 +47,6 @@ class AuthProvider extends ChangeNotifier {
     });
   }
 
-  User? get user => _user;
   UserProfile? get profile => _profile;
 
   bool get isLoading => _isLoading;
@@ -124,6 +126,52 @@ class AuthProvider extends ChangeNotifier {
   Future<void> signOut() async {
     await _authService.signOut();
   }
+  Future<void> updateUsername(String newUsername) async {
+    if (_user == null) return;
+
+    _isLoading = true;
+    _setError(null);
+    notifyListeners();
+
+    try {
+      await _userRepo.updateUsername(_user!.uid, newUsername);
+    } catch (e) {
+      _setError('Username güncellenemedi.');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> changePassword({
+    required String oldPassword,
+    required String newPassword,
+  }) async {
+    if (_user == null || _user!.email == null) {
+      _setError('Kullanıcı oturumu bulunamadı.');
+      return;
+    }
+
+    _isLoading = true;
+    _setError(null);
+    notifyListeners();
+
+    try {
+      final credential = EmailAuthProvider.credential(
+        email: _user!.email!,
+        password: oldPassword,
+      );
+
+      await _user!.reauthenticateWithCredential(credential);
+      await _user!.updatePassword(newPassword);
+    } catch (e) {
+      _setError(_friendlyAuthError(e));
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
 
   @override
   void dispose() {

@@ -13,4 +13,12 @@ class UserRepository {
       return UserProfile.fromMap(data);
     });
   }
+
+  Future<void> updateUsername(String uid, String newUsername) async {
+    await _db.collection('users').doc(uid).update({
+      'username': newUsername,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
 }

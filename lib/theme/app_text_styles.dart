@@ -11,4 +11,10 @@ class AppTextStyles {
     fontSize: 14,
     color: Colors.white,
   );
+
+  static const TextStyle subtitle = TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+    color: Colors.white,
+  );
 }

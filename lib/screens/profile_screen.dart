@@ -193,6 +193,7 @@ class _LoggedInView extends StatelessWidget {
                         ),
                       ],
                     ),
+
                   ),
                 ],
               ),
@@ -204,54 +205,30 @@ class _LoggedInView extends StatelessWidget {
             ],
           ),
         ),
-
-        const SizedBox(height: 18),
-
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(18),
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 10,
-                offset: const Offset(0, 6),
-                color: Colors.black.withOpacity(0.05),
-              ),
-            ],
-          ),
-          child: SwitchListTile.adaptive(
-            value: theme.isDark,
-            onChanged: (v) => context.read<ThemeProvider>().setDark(v),
-            title: const Text(
-              'Dark mode',
-              style: TextStyle(fontWeight: FontWeight.w700),
-            ),
-            subtitle: const Text('Tercih local olarak kaydedilir'),
-            secondary: Icon(
-              theme.isDark ? Icons.dark_mode : Icons.light_mode,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 12),
+        const SizedBox(height: 16),
 
         SizedBox(
           width: double.infinity,
-          child: ElevatedButton.icon(
-            onPressed: isLoading ? null : onLogout,
-            icon: const Icon(Icons.logout),
-            label: Text(isLoading ? 'Logging out...' : 'Logout'),
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                AppRoutes.editProfile,
+              );
+            },
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18),
               ),
             ),
+            child: const Text(
+              'Settings',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
           ),
         ),
+
 
         if (error != null) ...[
           const SizedBox(height: 10),

@@ -13,6 +13,8 @@ import 'screens/top_post_detail_screen.dart';
 import 'screens/category_post_detail_screen.dart';
 import 'screens/generic_category_screen.dart';
 
+import 'screens/edit_profile_screen.dart';
+
 class AppRoutes {
   // Auth / entry
   static const String welcome = '/welcome';
@@ -31,6 +33,8 @@ class AppRoutes {
   static const String categoryPostDetail = '/category_post_detail';
   static const genericCategory = '/generic-category';
 
+  static const editProfile = '/edit-profile';
+
 
   static Map<String, WidgetBuilder> routes = {
     welcome: (_) => const WelcomeScreen(),
@@ -45,5 +49,7 @@ class AppRoutes {
 
     categoryPostDetail: (_) => const CategoryPostDetailScreen(),
     genericCategory: (context) => const GenericCategoryScreen(),
+
+    editProfile: (_) => const EditProfileScreen(),
   };
 }
