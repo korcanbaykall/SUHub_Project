@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:suhub/providers/posts_provider.dart';
-import 'package:suhub/services/posts_repository.dart';
+import 'package:suhub/posts/providers/posts_provider.dart';
+import 'package:suhub/posts/services/posts_repository.dart';
 
 class _MockPostsRepository extends Mock implements PostsRepository {}
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:suhub/routes.dart';
-import 'package:suhub/screens/welcome_screen.dart';
+import 'package:suhub/core/routes.dart';
+import 'package:suhub/auth/screens/welcome_screen.dart';
 
 void main() {
   testWidgets('WelcomeScreen shows title and buttons', (tester) async {
