@@ -17,9 +17,10 @@ class EventDetailScreen extends StatelessWidget {
     final args = ModalRoute.of(context)?.settings.arguments;
     final data = (args is Map<String, dynamic>) ? args : <String, dynamic>{};
 
-    final String title = (data['title'] ?? 'Sabancı Seahawks Maçı') as String;
+    final String title = (data['title'] ?? 'Sabancı Seahawks Match') as String;
     final String date = (data['date'] ?? '24.01.2026') as String;
-    final String imageAsset = (data['imageAsset'] ?? 'assets/images/seahawks.png') as String;
+    final String imageAsset =
+    (data['imageAsset'] ?? 'assets/images/seahawks.png') as String;
     final String details = (data['details'] ??
         'We take the field at home, in front of our own fans, on January 24!\n\n'
             'Every play, every battle is an opportunity to show the Sabancı Seahawks spirit!\n\n'
@@ -27,8 +28,8 @@ class EventDetailScreen extends StatelessWidget {
 
     return Scaffold(
       body: Container(
-        width: size.width,
-        height: size.height,
+        width: double.infinity,
+        height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [AppColors.primary, AppColors.secondary],
@@ -38,12 +39,16 @@ class EventDetailScreen extends StatelessWidget {
         ),
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
+            padding: EdgeInsets.symmetric(
+              horizontal: size.width * 0.04,
+              vertical: size.height * 0.025,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                /// HEADER
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       child: Column(
@@ -51,57 +56,69 @@ class EventDetailScreen extends StatelessWidget {
                         children: [
                           Text(
                             title,
-                            style: const TextStyle(
-                              fontSize: 22,
+                            style: TextStyle(
+                              fontSize: size.width * 0.055,
                               fontWeight: FontWeight.w700,
                               color: Colors.white,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: size.height * 0.006),
                           Text(
                             date,
-                            style: const TextStyle(
-                              fontSize: 15,
+                            style: TextStyle(
+                              fontSize: size.width * 0.04,
                               color: Colors.white70,
                             ),
                           ),
                         ],
                       ),
                     ),
+                    SizedBox(width: size.width * 0.03),
                     Container(
-                      padding: const EdgeInsets.all(6),
+                      padding: EdgeInsets.all(size.width * 0.015),
                       decoration: BoxDecoration(
                         color: isDark ? Colors.black : Colors.white,
                         shape: BoxShape.circle,
                       ),
                       child: Image.asset(
                         'assets/images/logo.png',
-                        height: 60,
+                        height: size.width * 0.13,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
 
+                SizedBox(height: size.height * 0.015),
+
+                /// BACK BUTTON
                 InkWell(
                   onTap: () => Navigator.pop(context),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      Icon(Icons.arrow_back, color: Colors.white, size: 20),
-                      SizedBox(width: 4),
+                    children: [
+                      Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                        size: size.width * 0.045,
+                      ),
+                      SizedBox(width: size.width * 0.015),
                       Text(
                         'Back',
-                        style: AppTextStyles.bodyWhite,
+                        style: TextStyle(
+                          fontSize: size.width * 0.04,
+                          color: Colors.white,
+                        ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 20),
 
+                SizedBox(height: size.height * 0.025),
+
+                /// IMAGE
                 Container(
                   width: double.infinity,
-                  height: 220,
+                  height: size.height * 0.28,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
@@ -109,26 +126,30 @@ class EventDetailScreen extends StatelessWidget {
                   clipBehavior: Clip.antiAlias,
                   child: _isNetworkImage(imageAsset)
                       ? Image.network(imageAsset, fit: BoxFit.cover)
-                      : Image.asset(imageAsset, fit: BoxFit.contain),
+                      : Image.asset(imageAsset, fit: BoxFit.cover),
                 ),
-                const SizedBox(height: 24),
 
-                const Text(
-                  'Detaylar',
+                SizedBox(height: size.height * 0.03),
+
+                /// DETAILS TITLE
+                Text(
+                  'Details',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: size.width * 0.05,
                     fontWeight: FontWeight.w700,
                     color: Colors.white,
                   ),
                 ),
-                const SizedBox(height: 10),
 
+                SizedBox(height: size.height * 0.012),
+
+                /// DETAILS TEXT
                 Text(
                   details,
-                  style: const TextStyle(
-                    fontSize: 15,
+                  style: TextStyle(
+                    fontSize: size.width * 0.04,
                     color: Colors.white,
-                    height: 1.4,
+                    height: 1.5,
                   ),
                 ),
               ],
