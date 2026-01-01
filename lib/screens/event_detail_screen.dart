@@ -21,9 +21,9 @@ class EventDetailScreen extends StatelessWidget {
     final String date = (data['date'] ?? '24.01.2026') as String;
     final String imageAsset = (data['imageAsset'] ?? 'assets/images/seahawks.png') as String;
     final String details = (data['details'] ??
-            'Kendi evimizde, kendi taraftarımızın önünde 24 Ocak\'ta sahaya çıkıyoruz!\n\n'
-                'Her oyun, her mücadele Sabancı Seahawks ruhunu göstermek için bir fırsat!\n\n'
-                'Tüm enerjimizle Akdeniz Heroes karşısında sahadayız! 💙') as String;
+        'We take the field at home, in front of our own fans, on January 24!\n\n'
+            'Every play, every battle is an opportunity to show the Sabancı Seahawks spirit!\n\n'
+            'With all our energy, we’re on the field against Akdeniz Heroes! 💙') as String;
 
     return Scaffold(
       body: Container(
@@ -91,7 +91,7 @@ class EventDetailScreen extends StatelessWidget {
                       Icon(Icons.arrow_back, color: Colors.white, size: 20),
                       SizedBox(width: 4),
                       Text(
-                        'Geri',
+                        'Back',
                         style: AppTextStyles.bodyWhite,
                       ),
                     ],
