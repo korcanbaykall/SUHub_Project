@@ -19,24 +19,25 @@ class EventsScreen extends StatelessWidget {
         imageAsset:
             'https://cdn3.enuygun.com/media/lib/1x720/uploads/image/dedeman-palandoken-erzurum-one-cikan-resim-76402883.webp',
         details:
-            'Kış tatili ve kayak etkinliği! Detaylar yakında açıklanacak.',
+            'Winter holiday and ski event! Details will be announced soon.',
       ),
       _Event(
-        title: 'Radyosu Yılbaşı Partisi',
+        title: 'Radyosu New Year Party',
         date: '30.12.2025',
         imageAsset: 'https://kutlamamarketi.com/img/cms/parti.png',
         details:
-            'Yılbaşı partisi! Müzik, eğlence ve sürprizler. Detaylar yakında.',
+            'New Year’s party! Music, fun, and surprises. Details coming soon.',
       ),
       _Event(
-        title: 'Sabancı Seahawks Maçı',
+        title: 'Sabancı Seahawks Match',
         date: '24.01.2026',
         imageAsset:
             'https://upload.wikimedia.org/wikipedia/commons/4/44/2004_Vanderbilt-Navy_Game_TE.jpg',
         details:
-            'Kendi evimizde, kendi taraftarımızın önünde 24 Ocak\'ta sahaya çıkıyoruz!\n\n'
-            'Her oyun, her mücadele Sabancı Seahawks ruhunu göstermek için bir fırsat!\n\n'
-            'Tüm enerjimizle Akdeniz Heroes karşısında sahadayız! 💙',
+        'We take the field at home, in front of our own fans, on January 24!\n\n'
+            'Every play, every battle is an opportunity to show the Sabancı Seahawks spirit!\n\n'
+            'With all our energy, we’re on the field against Akdeniz Heroes! 💙'
+        ,
       ),
     ];
 
