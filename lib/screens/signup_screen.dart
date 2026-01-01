@@ -44,10 +44,9 @@ class _SignupScreenState extends State<SignupScreen> {
     if (!mounted) return;
 
     if (ok) {
-      // AuthGate auth state ile otomatik MainShell'a geçer.
       Navigator.of(context).popUntil((route) => route.isFirst);
     } else {
-      final msg = auth.error ?? 'Kayıt başarısız.';
+      final msg = auth.error ?? 'Unsuccesful';
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(msg)),
       );

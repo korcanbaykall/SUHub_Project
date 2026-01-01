@@ -62,22 +62,22 @@ class AuthProvider extends ChangeNotifier {
     if (e is FirebaseAuthException) {
       switch (e.code) {
         case 'invalid-email':
-          return 'Geçersiz e-posta formatı.';
+          return 'Invalid e-mail';
         case 'user-not-found':
-          return 'Bu e-posta ile kayıtlı kullanıcı bulunamadı.';
+          return 'User not found';
         case 'wrong-password':
-          return 'Şifre yanlış.';
+          return 'Wrong Password';
         case 'email-already-in-use':
-          return 'Bu e-posta zaten kullanımda.';
+          return 'E-mail already exists';
         case 'weak-password':
-          return 'Şifre çok zayıf (en az 6 karakter önerilir).';
+          return 'Weak Password (at least 6 characters).';
         case 'network-request-failed':
-          return 'İnternet bağlantısı hatası. Tekrar dene.';
+          return 'Weak network connection, try again.';
         default:
-          return e.message ?? 'Giriş/Kayıt sırasında hata oluştu.';
+          return e.message ?? 'An unexpected error occurred.';
       }
     }
-    return 'Beklenmeyen hata oluştu.';
+    return 'An unexpected error occurred.';
   }
 
   Future<bool> signUp({
@@ -136,7 +136,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       await _userRepo.updateUsername(_user!.uid, newUsername);
     } catch (e) {
-      _setError('Username güncellenemedi.');
+      _setError('Username is not updated.');
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -148,7 +148,7 @@ class AuthProvider extends ChangeNotifier {
     required String newPassword,
   }) async {
     if (_user == null || _user!.email == null) {
-      _setError('Kullanıcı oturumu bulunamadı.');
+      _setError('User not found');
       return;
     }
 

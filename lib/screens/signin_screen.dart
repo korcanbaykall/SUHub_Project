@@ -41,12 +41,9 @@ class _SigninScreenState extends State<SigninScreen> {
     if (!mounted) return;
 
     if (ok) {
-      // AuthGate otomatik MainShell'a geçecek.
-      // Signin ekranını kapatıp köke dönelim:
       Navigator.of(context).popUntil((route) => route.isFirst);
     } else {
-      // auth.error zaten user-friendly
-      final msg = auth.error ?? 'Giriş başarısız.';
+      final msg = auth.error ?? 'Unsuccesful';
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(msg)),
       );
