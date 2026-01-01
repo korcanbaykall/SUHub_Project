@@ -13,7 +13,6 @@ class ProfileScreen extends StatelessWidget {
   Future<void> _logout(BuildContext context) async {
     Navigator.of(context).popUntil((route) => route.isFirst);
     await context.read<AuthProvider>().signOut();
-    // AuthGate otomatik olarak Welcome'a döndürür.
   }
 
   @override

@@ -58,204 +58,159 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ),
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
-          child: Column(
-            children: [
-              _card(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Username',
-                        style: AppTextStyles.subtitle),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: _usernameCtrl,
-                      decoration: const InputDecoration(
-                        hintText: 'Enter your username',
+                  _card(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Change Password',
+                          style: AppTextStyles.subtitle),
+                      const SizedBox(height: 8),
+                      TextField(
+                        controller: _oldPasswordCtrl,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          labelText: 'Old password',
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: auth.isLoading
-                            ? null
-                            : () async {
-                          final v = _usernameCtrl.text.trim();
-                          if (v.isEmpty) return;
-
-                          await auth.updateUsername(v);
-                          if (!mounted) return;
-
-                          if (auth.error == null) {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(
-                              const SnackBar(
-                                content:
-                                Text('Username updated'),
-                              ),
-                            );
-                          }
-                        },
-                        child: const Text('Save Username'),
+                      const SizedBox(height: 8),
+                      TextField(
+                        controller: _newPasswordCtrl,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          labelText: 'New password',
+                          errorText: _passwordError,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton(
+                          onPressed: () async {
+                            final email = auth.user?.email;
+                            if (email == null) return;
 
-              const SizedBox(height: 20),
+                            await FirebaseAuth.instance
+                                .sendPasswordResetEmail(email: email);
 
-              _card(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Change Password',
-                        style: AppTextStyles.subtitle),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: _oldPasswordCtrl,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        labelText: 'Old password',
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: _newPasswordCtrl,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: 'New password',
-                        errorText: _passwordError,
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: TextButton(
-                        onPressed: () async {
-                          final email = auth.user?.email;
-                          if (email == null) return;
+                            if (!mounted) return;
 
-                          await FirebaseAuth.instance
-                              .sendPasswordResetEmail(email: email);
-
-                          if (!mounted) return;
-
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                  'Password reset email sent'),
-                            ),
-                          );
-                        },
-                        child: const Text('Forgot password?'),
-                      ),
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: auth.isLoading
-                            ? null
-                            : () async {
-                          final newPass =
-                              _newPasswordCtrl.text;
-
-                          if (newPass.length < 6) {
-                            setState(() {
-                              _passwordError =
-                              'Minimum 6 characters';
-                            });
-                            return;
-                          }
-
-                          setState(() => _passwordError = null);
-
-                          await auth.changePassword(
-                            oldPassword:
-                            _oldPasswordCtrl.text,
-                            newPassword: newPass,
-                          );
-
-                          if (!mounted) return;
-
-                          if (auth.error == null) {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(
                               const SnackBar(
                                 content: Text(
-                                    'Password updated'),
+                                    'Password reset email sent'),
                               ),
                             );
-                            _oldPasswordCtrl.clear();
-                            _newPasswordCtrl.clear();
-                          } else {
-                            setState(() {
-                              _passwordError = auth.error;
-                            });
-                          }
-                        },
-                        child: const Text('Change Password'),
+                          },
+                          child: const Text('Forgot password?'),
+                        ),
+                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: auth.isLoading
+                              ? null
+                              : () async {
+                            final newPass =
+                                _newPasswordCtrl.text;
+
+                            if (newPass.length < 6) {
+                              setState(() {
+                                _passwordError =
+                                'Minimum 6 characters';
+                              });
+                              return;
+                            }
+
+                            setState(() => _passwordError = null);
+
+                            await auth.changePassword(
+                              oldPassword:
+                              _oldPasswordCtrl.text,
+                              newPassword: newPass,
+                            );
+
+                            if (!mounted) return;
+
+                            if (auth.error == null) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'Password updated'),
+                                ),
+                              );
+                              _oldPasswordCtrl.clear();
+                              _newPasswordCtrl.clear();
+                            } else {
+                              setState(() {
+                                _passwordError = auth.error;
+                              });
+                            }
+                          },
+                          child: const Text('Change Password'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                _card(
+                  child: SwitchListTile.adaptive(
+                    value: theme.isDark,
+                    onChanged: theme.setDark,
+                    title: const Text(
+                      'Dark mode',
+                      style: TextStyle(fontWeight: FontWeight.w700),
+                    ),
+                    subtitle:
+                    const Text('Saved locally on device'),
+                    secondary: Icon(
+                      theme.isDark
+                          ? Icons.dark_mode
+                          : Icons.light_mode,
+                      color: colorScheme.primary,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: auth.isLoading
+                        ? null
+                        : () async {
+                      await auth.signOut();
+                    },
+                    icon: const Icon(Icons.logout),
+                    label: Text(
+                      auth.isLoading
+                          ? 'Logging out...'
+                          : 'Logout',
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                      colorScheme.errorContainer,
+                      foregroundColor:
+                      colorScheme.onErrorContainer,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                        BorderRadius.circular(18),
                       ),
                     ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              _card(
-                child: SwitchListTile.adaptive(
-                  value: theme.isDark,
-                  onChanged: theme.setDark,
-                  title: const Text(
-                    'Dark mode',
-                    style: TextStyle(fontWeight: FontWeight.w700),
-                  ),
-                  subtitle:
-                  const Text('Saved locally on device'),
-                  secondary: Icon(
-                    theme.isDark
-                        ? Icons.dark_mode
-                        : Icons.light_mode,
-                    color: colorScheme.primary,
                   ),
                 ),
-              ),
-
-              const SizedBox(height: 12),
-
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: auth.isLoading
-                      ? null
-                      : () async {
-                    await auth.signOut();
-                  },
-                  icon: const Icon(Icons.logout),
-                  label: Text(
-                    auth.isLoading
-                        ? 'Logging out...'
-                        : 'Logout',
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                    colorScheme.errorContainer,
-                    foregroundColor:
-                    colorScheme.onErrorContainer,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                      BorderRadius.circular(18),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+              ],
           ),
         ),
-      ),
+      )
     );
   }
 
