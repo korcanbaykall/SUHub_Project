@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../theme/app_colors.dart';
-import '../theme/app_text_styles.dart';
-import '../providers/auth_provider.dart';
-import '../providers/theme_provider.dart';
-import '../routes.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
+import '../../auth/providers/auth_provider.dart';
+import '../../shell/providers/theme_provider.dart';
+import '../../core/routes.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});

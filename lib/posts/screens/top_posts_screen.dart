@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/post.dart';
-import '../providers/auth_provider.dart';
+import '../../auth/providers/auth_provider.dart';
 import '../providers/posts_provider.dart';
-import '../routes.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_text_styles.dart';
-import '../widgets/create_post_dialog.dart';
+import '../../core/routes.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
+import '../../widgets/create_post_dialog.dart';
 
 class TopPostsScreen extends StatelessWidget {
   const TopPostsScreen({super.key});

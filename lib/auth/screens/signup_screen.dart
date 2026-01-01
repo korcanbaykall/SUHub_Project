@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
-import '../routes.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_text_styles.dart';
+import '../../core/routes.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 
-class SigninScreen extends StatefulWidget {
-  const SigninScreen({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<SigninScreen> createState() => _SigninScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SigninScreenState extends State<SigninScreen> {
+class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
 
+  final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -23,17 +24,19 @@ class _SigninScreenState extends State<SigninScreen> {
 
   @override
   void dispose() {
+    _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
-  Future<void> _handleSignIn(BuildContext context) async {
+  Future<void> _handleSignUp(BuildContext context) async {
     if (!_formKey.currentState!.validate()) return;
 
     final auth = context.read<AuthProvider>();
 
-    final ok = await auth.signIn(
+    final ok = await auth.signUp(
+      username: _usernameController.text,
       email: _emailController.text,
       password: _passwordController.text,
     );
@@ -74,7 +77,6 @@ class _SigninScreenState extends State<SigninScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Back
                 IconButton(
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -82,12 +84,12 @@ class _SigninScreenState extends State<SigninScreen> {
                 const SizedBox(height: 4),
 
                 const Text(
-                  'Sign In',
+                  'Sign Up',
                   style: AppTextStyles.appTitle,
                 ),
                 const SizedBox(height: 6),
                 const Text(
-                  'Log in to continue.',
+                  'Create an account to continue.',
                   style: AppTextStyles.bodyWhite,
                 ),
                 const SizedBox(height: 18),
@@ -102,6 +104,32 @@ class _SigninScreenState extends State<SigninScreen> {
                     key: _formKey,
                     child: Column(
                       children: [
+                        TextFormField(
+                          controller: _usernameController,
+                          decoration: InputDecoration(
+                            labelText: 'Username',
+                            filled: true,
+                            fillColor:
+                                colorScheme.surface.withOpacity(isDark ? 0.98 : 1),
+                            labelStyle: TextStyle(color: colorScheme.onSurfaceVariant),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide(color: colorScheme.outlineVariant),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide(color: colorScheme.primary),
+                            ),
+                          ),
+                          validator: (v) {
+                            final value = (v ?? '').trim();
+                            if (value.isEmpty) return 'Username is required.';
+                            if (value.length < 3) return 'Username must be at least 3 chars.';
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 12),
+
                         TextFormField(
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
@@ -128,6 +156,7 @@ class _SigninScreenState extends State<SigninScreen> {
                           },
                         ),
                         const SizedBox(height: 12),
+
                         TextFormField(
                           controller: _passwordController,
                           obscureText: _obscure,
@@ -186,7 +215,7 @@ class _SigninScreenState extends State<SigninScreen> {
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                            onPressed: auth.isLoading ? null : () => _handleSignIn(context),
+                            onPressed: auth.isLoading ? null : () => _handleSignUp(context),
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 14),
                               shape: RoundedRectangleBorder(
@@ -199,7 +228,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                     width: 20,
                                     child: CircularProgressIndicator(strokeWidth: 2),
                                   )
-                                : const Text('Sign In'),
+                                : const Text('Sign Up'),
                           ),
                         ),
 
@@ -209,14 +238,14 @@ class _SigninScreenState extends State<SigninScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Don't have an account? ",
+                              'Already have an account? ',
                               style: TextStyle(color: colorScheme.onSurfaceVariant),
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.pushNamed(context, AppRoutes.signup);
+                                Navigator.pushNamed(context, AppRoutes.signin);
                               },
-                              child: const Text('Sign Up'),
+                              child: const Text('Sign In'),
                             ),
                           ],
                         ),

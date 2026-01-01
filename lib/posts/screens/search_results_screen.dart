@@ -3,9 +3,9 @@ import 'package:provider/provider.dart';
 
 import '../models/post.dart';
 import '../providers/posts_provider.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_text_styles.dart';
-import '../routes.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
+import '../../core/routes.dart';
 
 class SearchResultsScreen extends StatelessWidget {
   final String query;

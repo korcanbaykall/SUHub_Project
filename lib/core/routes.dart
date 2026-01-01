@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
-import 'screens/welcome_screen.dart';
-import 'screens/signin_screen.dart';
-import 'screens/signup_screen.dart';
+import '../auth/screens/welcome_screen.dart';
+import '../auth/screens/signin_screen.dart';
+import '../auth/screens/signup_screen.dart';
 
-import 'screens/events_screen.dart';
-import 'screens/event_detail_screen.dart';
+import '../events/screens/events_screen.dart';
+import '../events/screens/event_detail_screen.dart';
 
-import 'screens/top_posts_screen.dart';
-import 'screens/top_post_detail_screen.dart';
+import '../posts/screens/top_posts_screen.dart';
+import '../posts/screens/top_post_detail_screen.dart';
 
-import 'screens/category_post_detail_screen.dart';
-import 'screens/generic_category_screen.dart';
+import '../categories/screens/category_post_detail_screen.dart';
+import '../categories/screens/generic_category_screen.dart';
 
-import 'screens/edit_profile_screen.dart';
+import '../profile/screens/edit_profile_screen.dart';
 
 class AppRoutes {
   // Auth / entry

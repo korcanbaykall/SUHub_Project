@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_text_styles.dart';
-import '../routes.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
+import '../../core/routes.dart';
 import 'generic_category_screen.dart';
-import '../models/post.dart';
-import 'search_results_screen.dart';
-import '../constants/post_categories.dart';
+import '../../posts/models/post.dart';
+import '../../posts/screens/search_results_screen.dart';
+import '../../core/constants/post_categories.dart';
 
 
 class CategoriesScreen extends StatelessWidget {

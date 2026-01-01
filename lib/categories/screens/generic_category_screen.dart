@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/post.dart';
-import '../providers/auth_provider.dart';
-import '../providers/posts_provider.dart';
-import '../routes.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_text_styles.dart';
-import '../widgets/create_post_dialog.dart';
-import '../constants/post_categories.dart';
+import '../../posts/models/post.dart';
+import '../../auth/providers/auth_provider.dart';
+import '../../posts/providers/posts_provider.dart';
+import '../../core/routes.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
+import '../../widgets/create_post_dialog.dart';
+import '../../core/constants/post_categories.dart';
 
 class GenericCategoryScreen extends StatelessWidget {
   const GenericCategoryScreen({super.key});

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/tab_provider.dart';
-import 'categories_screen.dart';
+import '../../categories/screens/categories_screen.dart';
 import 'home_screen.dart';
-import 'profile_screen.dart';
+import '../../profile/screens/profile_screen.dart';
 
 class MainShell extends StatelessWidget {
   const MainShell({super.key});

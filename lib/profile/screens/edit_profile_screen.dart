@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../providers/auth_provider.dart' as app_auth;
-import '../providers/theme_provider.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_text_styles.dart';
+import '../../auth/providers/auth_provider.dart' as app_auth;
+import '../../shell/providers/theme_provider.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});

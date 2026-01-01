@@ -3,15 +3,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
-import 'routes.dart';
+import 'core/routes.dart';
 
-import 'providers/auth_provider.dart';
-import 'providers/posts_provider.dart';
-import 'providers/tab_provider.dart';
-import 'providers/theme_provider.dart';
+import 'auth/providers/auth_provider.dart';
+import 'posts/providers/posts_provider.dart';
+import 'shell/providers/tab_provider.dart';
+import 'shell/providers/theme_provider.dart';
 
-import 'screens/auth_gate.dart';
-import 'theme/app_colors.dart';
+import 'auth/screens/auth_gate.dart';
+import 'core/theme/app_colors.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

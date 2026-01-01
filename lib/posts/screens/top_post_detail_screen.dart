@@ -3,10 +3,10 @@ import 'package:provider/provider.dart';
 
 import '../models/comment.dart';
 import '../models/post.dart';
-import '../providers/auth_provider.dart';
+import '../../auth/providers/auth_provider.dart';
 import '../providers/posts_provider.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_text_styles.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 
 class TopPostDetailScreen extends StatelessWidget {
   const TopPostDetailScreen({super.key});
