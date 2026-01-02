@@ -6,6 +6,7 @@ import 'firebase_options.dart';
 import 'core/routes.dart';
 
 import 'auth/providers/auth_provider.dart';
+import 'events/providers/events_provider.dart';
 import 'posts/providers/posts_provider.dart';
 import 'shell/providers/tab_provider.dart';
 import 'shell/providers/theme_provider.dart';
@@ -27,6 +28,7 @@ class SUHubApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => EventsProvider()),
         ChangeNotifierProvider(create: (_) => PostsProvider()),
         ChangeNotifierProvider(create: (_) => TabProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),

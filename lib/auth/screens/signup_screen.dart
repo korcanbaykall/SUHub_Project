@@ -39,6 +39,7 @@ class _SignupScreenState extends State<SignupScreen> {
       username: _usernameController.text,
       email: _emailController.text,
       password: _passwordController.text,
+      role: "user",
     );
 
     if (!mounted) return;
