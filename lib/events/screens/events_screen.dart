@@ -1,56 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../../auth/providers/auth_provider.dart';
 import '../../core/routes.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
-import '../models/event.dart';
-import '../providers/events_provider.dart';
-import '../widgets/create_event_dialog.dart';
 
 class EventsScreen extends StatelessWidget {
   const EventsScreen({super.key});
 
-  Future<void> _openCreateDialog(BuildContext context) async {
-    final events = context.read<EventsProvider>();
-
-    final created = await showDialog<bool>(
-      context: context,
-      builder: (_) => CreateEventDialog(
-        onCreate: ({
-          required String title,
-          required String date,
-          required String imageUrl,
-          required String details,
-        }) async {
-          await events.createEvent(
-            title: title,
-            date: date,
-            imageUrl: imageUrl,
-            details: details,
-          );
-        },
-      ),
-    );
-
-    if (!context.mounted) return;
-    if (created == true && events.error != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(events.error!)),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final auth = context.watch<AuthProvider>();
-    final eventsProvider = context.watch<EventsProvider>();
     final size = MediaQuery.of(context).size;
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final isAdmin = auth.profile?.role == 'admin';
 
+    final events = <_Event>[
+      _Event(
+        title: 'SuSnow Palandöken',
+        date: '18.12.2025',
+        imageAsset:
+            'https://cdn3.enuygun.com/media/lib/1x720/uploads/image/dedeman-palandoken-erzurum-one-cikan-resim-76402883.webp',
+        details:
+            'Winter holiday and ski event! Details will be announced soon.',
+      ),
+      _Event(
+        title: 'Radyosu New Year Party',
+        date: '30.12.2025',
+        imageAsset: 'https://kutlamamarketi.com/img/cms/parti.png',
+        details:
+            'New Year’s party! Music, fun, and surprises. Details coming soon.',
+      ),
+      _Event(
+        title: 'Sabancı Seahawks Match',
+        date: '24.01.2026',
+        imageAsset:
+            'https://upload.wikimedia.org/wikipedia/commons/4/44/2004_Vanderbilt-Navy_Game_TE.jpg',
+        details:
+        'We take the field at home, in front of our own fans, on January 24!\n\n'
+            'Every play, every battle is an opportunity to show the Sabancı Seahawks spirit!\n\n'
+            'With all our energy, we’re on the field against Akdeniz Heroes! 💙'
+        ,
+      ),
+    ];
 
     return Scaffold(
       body: Container(
@@ -140,39 +129,11 @@ class EventsScreen extends StatelessWidget {
                 const SizedBox(height: 12),
 
                 Expanded(
-                  child: StreamBuilder<List<Event>>(
-                    stream: eventsProvider.eventsStream(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return Center(
-                          child: Text(
-                            'Error: ${snapshot.error}',
-                            style: AppTextStyles.bodyWhite,
-                          ),
-                        );
-                      }
-
-                      if (!snapshot.hasData) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-
-                      final events = snapshot.data!;
-                      if (events.isEmpty) {
-                        return const Center(
-                          child: Text(
-                            'No events yet.',
-                            style: AppTextStyles.bodyWhite,
-                          ),
-                        );
-                      }
-
-                      return ListView.builder(
-                        itemCount: events.length,
-                        itemBuilder: (context, index) {
-                          final event = events[index];
-                          return _EventCard(event: event);
-                        },
-                      );
+                  child: ListView.builder(
+                    itemCount: events.length,
+                    itemBuilder: (context, index) {
+                      final event = events[index];
+                      return _EventCard(event: event);
                     },
                   ),
                 ),
@@ -181,18 +142,33 @@ class EventsScreen extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: isAdmin
-          ? FloatingActionButton(
-              onPressed: () => _openCreateDialog(context),
-              child: const Icon(Icons.add),
-            )
-          : null,
     );
   }
 }
 
+class _Event {
+  final String title;
+  final String date;
+  final String imageAsset;
+  final String details;
+
+  _Event({
+    required this.title,
+    required this.date,
+    required this.imageAsset,
+    required this.details,
+  });
+
+  Map<String, dynamic> toMap() => {
+        'title': title,
+        'date': date,
+        'imageAsset': imageAsset,
+        'details': details,
+      };
+}
+
 class _EventCard extends StatelessWidget {
-  final Event event;
+  final _Event event;
 
   const _EventCard({required this.event});
 
@@ -218,7 +194,7 @@ class _EventCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             child: Image.network(
-              event.imageUrl,
+              event.imageAsset,
               fit: BoxFit.cover,
             ),
           ),
@@ -252,7 +228,7 @@ class _EventCard extends StatelessWidget {
                         Navigator.pushNamed(
                           context,
                           AppRoutes.eventDetail,
-                          arguments: event.toDetailMap(),
+                          arguments: event.toMap(),
                         );
                       },
                       style: ElevatedButton.styleFrom(
