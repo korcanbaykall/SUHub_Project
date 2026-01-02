@@ -5,12 +5,14 @@ class UserProfile {
   final String email;
   final String username;
   final Timestamp? createdAt;
+  final String role;
 
   const UserProfile({
     required this.uid,
     required this.email,
     required this.username,
     required this.createdAt,
+    required this.role,
   });
 
   factory UserProfile.fromMap(Map<String, dynamic> data) {
@@ -19,6 +21,7 @@ class UserProfile {
       email: (data['email'] ?? '') as String,
       username: (data['username'] ?? '') as String,
       createdAt: data['createdAt'] as Timestamp?,
+      role: (data['role'] ?? 'user') as String,
     );
   }
 
@@ -28,6 +31,7 @@ class UserProfile {
       'email': email,
       'username': username,
       'createdAt': createdAt,
+      'role': role,
     };
   }
 }
