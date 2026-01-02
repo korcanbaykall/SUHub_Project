@@ -145,6 +145,32 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> updateProfilePhoto({
+    required String photoUrl,
+    required double photoAlignX,
+    required double photoAlignY,
+  }) async {
+    if (_user == null) return;
+
+    _isLoading = true;
+    _setError(null);
+    notifyListeners();
+
+    try {
+      await _userRepo.updateProfilePhoto(
+        uid: _user!.uid,
+        photoUrl: photoUrl,
+        photoAlignX: photoAlignX,
+        photoAlignY: photoAlignY,
+      );
+    } catch (e) {
+      _setError('Profile photo is not updated.');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> changePassword({
     required String oldPassword,
     required String newPassword,

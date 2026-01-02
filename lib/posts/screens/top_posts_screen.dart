@@ -8,6 +8,7 @@ import '../../core/routes.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../widgets/create_post_dialog.dart';
+import '../../widgets/user_avatar.dart';
 
 class TopPostsScreen extends StatelessWidget {
   const TopPostsScreen({super.key});
@@ -17,7 +18,11 @@ class TopPostsScreen extends StatelessWidget {
     final posts = context.read<PostsProvider>();
 
     final user = auth.user!;
-    final username = auth.profile?.username ?? (user.email ?? 'user');
+    final profile = auth.profile;
+    final username = profile?.username ?? (user.email ?? 'user');
+    final authorPhotoUrl = profile?.photoUrl ?? '';
+    final authorPhotoAlignX = profile?.photoAlignX ?? 0.0;
+    final authorPhotoAlignY = profile?.photoAlignY ?? 0.0;
 
     final created = await showDialog<bool>(
       context: context,
@@ -28,6 +33,9 @@ class TopPostsScreen extends StatelessWidget {
             category: category,
             createdBy: user.uid,
             authorUsername: username,
+            authorPhotoUrl: authorPhotoUrl,
+            authorPhotoAlignX: authorPhotoAlignX,
+            authorPhotoAlignY: authorPhotoAlignY,
           );
         },
       ),
@@ -178,18 +186,14 @@ class _PostCard extends StatelessWidget {
             // Header line
             Row(
               children: [
-                CircleAvatar(
+                UserAvatar(
                   radius: 18,
+                  initials: post.authorUsername,
+                  imageUrl: post.authorPhotoUrl,
+                  alignX: post.authorPhotoAlignX,
+                  alignY: post.authorPhotoAlignY,
                   backgroundColor: colorScheme.surfaceVariant,
-                  child: Text(
-                    post.authorUsername.isNotEmpty
-                        ? post.authorUsername[0].toUpperCase()
-                        : 'U',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      color: colorScheme.onSurface,
-                    ),
-                  ),
+                  textColor: colorScheme.onSurface,
                 ),
                 const SizedBox(width: 10),
                 Expanded(

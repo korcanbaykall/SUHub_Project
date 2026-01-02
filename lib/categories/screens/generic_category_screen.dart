@@ -8,6 +8,7 @@ import '../../core/routes.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../widgets/create_post_dialog.dart';
+import '../../widgets/user_avatar.dart';
 import '../../core/constants/post_categories.dart';
 
 class GenericCategoryScreen extends StatelessWidget {
@@ -29,8 +30,11 @@ class GenericCategoryScreen extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final user = auth.user;
-    final username =
-        auth.profile?.username ?? user?.email ?? 'user';
+    final profile = auth.profile;
+    final username = profile?.username ?? user?.email ?? 'user';
+    final authorPhotoUrl = profile?.photoUrl ?? '';
+    final authorPhotoAlignX = profile?.photoAlignX ?? 0.0;
+    final authorPhotoAlignY = profile?.photoAlignY ?? 0.0;
 
     return Scaffold(
       appBar: AppBar(
@@ -51,6 +55,9 @@ class GenericCategoryScreen extends StatelessWidget {
                   category: categoryTitle,
                   createdBy: user.uid,
                   authorUsername: username,
+                  authorPhotoUrl: authorPhotoUrl,
+                  authorPhotoAlignX: authorPhotoAlignX,
+                  authorPhotoAlignY: authorPhotoAlignY,
                 );
               },
             ),
@@ -157,20 +164,14 @@ class GenericCategoryScreen extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            CircleAvatar(
+                            UserAvatar(
                               radius: 18,
-                              backgroundColor:
-                              colorScheme.surfaceVariant,
-                              child: Text(
-                                post.authorUsername.isNotEmpty
-                                    ? post.authorUsername[0]
-                                    .toUpperCase()
-                                    : 'U',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w800,
-                                  color: colorScheme.onSurface,
-                                ),
-                              ),
+                              initials: post.authorUsername,
+                              imageUrl: post.authorPhotoUrl,
+                              alignX: post.authorPhotoAlignX,
+                              alignY: post.authorPhotoAlignY,
+                              backgroundColor: colorScheme.surfaceVariant,
+                              textColor: colorScheme.onSurface,
                             ),
                             const SizedBox(width: 10),
                             Expanded(

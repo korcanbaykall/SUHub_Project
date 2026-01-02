@@ -68,6 +68,9 @@ class PostsRepository {
     required String category,
     required String createdBy,
     required String authorUsername,
+    required String authorPhotoUrl,
+    required double authorPhotoAlignX,
+    required double authorPhotoAlignY,
   }) async {
     final doc = _db.collection('posts').doc();
     await doc.set({
@@ -76,6 +79,9 @@ class PostsRepository {
       'category': category,
       'createdBy': createdBy,
       'authorUsername': authorUsername,
+      'authorPhotoUrl': authorPhotoUrl,
+      'authorPhotoAlignX': authorPhotoAlignX,
+      'authorPhotoAlignY': authorPhotoAlignY,
       'likes': 0,
       'dislikes': 0,
       'comments': 0,
@@ -88,6 +94,9 @@ class PostsRepository {
     required String text,
     required String createdBy,
     required String authorUsername,
+    required String authorPhotoUrl,
+    required double authorPhotoAlignX,
+    required double authorPhotoAlignY,
   }) async {
     final postRef = _db.collection('posts').doc(postId);
     final commentRef = postRef.collection('comments').doc();
@@ -98,6 +107,9 @@ class PostsRepository {
         'text': text,
         'createdBy': createdBy,
         'authorUsername': authorUsername,
+        'authorPhotoUrl': authorPhotoUrl,
+        'authorPhotoAlignX': authorPhotoAlignX,
+        'authorPhotoAlignY': authorPhotoAlignY,
         'createdAt': FieldValue.serverTimestamp(),
       });
       tx.update(postRef, {'comments': FieldValue.increment(1)});

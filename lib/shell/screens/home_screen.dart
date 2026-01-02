@@ -147,8 +147,12 @@ class HomeScreen extends StatelessWidget {
 
                       if (user == null) return;
 
+                      final profile = auth.profile;
                       final username =
-                          auth.profile?.username ?? user.email ?? 'user';
+                          profile?.username ?? user.email ?? 'user';
+                      final authorPhotoUrl = profile?.photoUrl ?? '';
+                      final authorPhotoAlignX = profile?.photoAlignX ?? 0.0;
+                      final authorPhotoAlignY = profile?.photoAlignY ?? 0.0;
 
                       showDialog(
                         context: context,
@@ -159,6 +163,9 @@ class HomeScreen extends StatelessWidget {
                               category: category,
                               createdBy: user.uid,
                               authorUsername: username,
+                              authorPhotoUrl: authorPhotoUrl,
+                              authorPhotoAlignX: authorPhotoAlignX,
+                              authorPhotoAlignY: authorPhotoAlignY,
                             );
                           },
                         ),

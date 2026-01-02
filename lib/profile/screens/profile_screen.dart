@@ -6,6 +6,7 @@ import '../../core/theme/app_text_styles.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../shell/providers/theme_provider.dart';
 import '../../core/routes.dart';
+import '../../widgets/user_avatar.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -42,6 +43,9 @@ class ProfileScreen extends StatelessWidget {
                   username: profile?.username ?? 'User',
                   email: user.email ?? '-',
                   uid: user.uid,
+                  photoUrl: profile?.photoUrl ?? '',
+                  photoAlignX: profile?.photoAlignX ?? 0.0,
+                  photoAlignY: profile?.photoAlignY ?? 0.0,
                   isLoading: auth.isLoading,
                   error: auth.error,
                   onLogout: () => _logout(context),
@@ -95,6 +99,9 @@ class _LoggedInView extends StatelessWidget {
   final String username;
   final String email;
   final String uid;
+  final String photoUrl;
+  final double photoAlignX;
+  final double photoAlignY;
   final bool isLoading;
   final String? error;
   final VoidCallback onLogout;
@@ -103,6 +110,9 @@ class _LoggedInView extends StatelessWidget {
     required this.username,
     required this.email,
     required this.uid,
+    required this.photoUrl,
+    required this.photoAlignX,
+    required this.photoAlignY,
     required this.isLoading,
     required this.error,
     required this.onLogout,
@@ -156,17 +166,14 @@ class _LoggedInView extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  CircleAvatar(
+                  UserAvatar(
                     radius: 26,
+                    initials: username,
+                    imageUrl: photoUrl,
+                    alignX: photoAlignX,
+                    alignY: photoAlignY,
                     backgroundColor: colorScheme.surfaceVariant,
-                    child: Text(
-                      username.isNotEmpty ? username[0].toUpperCase() : 'U',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        color: colorScheme.onSurface,
-                      ),
-                    ),
+                    textColor: colorScheme.onSurface,
                   ),
                   const SizedBox(width: 12),
                   Expanded(

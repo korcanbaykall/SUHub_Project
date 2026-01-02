@@ -6,6 +6,7 @@ import '../../auth/providers/auth_provider.dart';
 import '../../posts/providers/posts_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../widgets/create_post_dialog.dart';
+import '../../widgets/user_avatar.dart';
 
 class CategoryPostDetailScreen extends StatelessWidget {
   const CategoryPostDetailScreen({super.key});
@@ -18,7 +19,11 @@ class CategoryPostDetailScreen extends StatelessWidget {
     final auth = context.watch<AuthProvider>();
 
     final user = auth.user;
-    final username = auth.profile?.username ?? user?.email ?? 'user';
+    final profile = auth.profile;
+    final username = profile?.username ?? user?.email ?? 'user';
+    final authorPhotoUrl = profile?.photoUrl ?? '';
+    final authorPhotoAlignX = profile?.photoAlignX ?? 0.0;
+    final authorPhotoAlignY = profile?.photoAlignY ?? 0.0;
 
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -73,18 +78,14 @@ class CategoryPostDetailScreen extends StatelessWidget {
                       // Header (avatar + username + category pill)
                       Row(
                         children: [
-                          CircleAvatar(
+                          UserAvatar(
                             radius: 18,
+                            initials: post.authorUsername,
+                            imageUrl: post.authorPhotoUrl,
+                            alignX: post.authorPhotoAlignX,
+                            alignY: post.authorPhotoAlignY,
                             backgroundColor: colorScheme.surfaceVariant,
-                            child: Text(
-                              post.authorUsername.isNotEmpty
-                                  ? post.authorUsername[0].toUpperCase()
-                                  : 'U',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w800,
-                                color: colorScheme.onSurface,
-                              ),
-                            ),
+                            textColor: colorScheme.onSurface,
                           ),
                           const SizedBox(width: 10),
                           Expanded(
@@ -309,6 +310,9 @@ class CategoryPostDetailScreen extends StatelessWidget {
                                     text: text.trim(),
                                     createdBy: user.uid,
                                     authorUsername: username,
+                                    authorPhotoUrl: authorPhotoUrl,
+                                    authorPhotoAlignX: authorPhotoAlignX,
+                                    authorPhotoAlignY: authorPhotoAlignY,
                                   );
                                 },
                               ),

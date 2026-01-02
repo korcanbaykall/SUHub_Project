@@ -21,4 +21,18 @@ class UserRepository {
     });
   }
 
+  Future<void> updateProfilePhoto({
+    required String uid,
+    required String photoUrl,
+    required double photoAlignX,
+    required double photoAlignY,
+  }) async {
+    await _db.collection('users').doc(uid).update({
+      'photoUrl': photoUrl,
+      'photoAlignX': photoAlignX,
+      'photoAlignY': photoAlignY,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
 }

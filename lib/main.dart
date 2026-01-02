@@ -34,7 +34,7 @@ class SUHubApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
       child: Consumer<ThemeProvider>(
-        builder: (_, theme, __) {
+        builder: (context, theme, _) {
           return MaterialApp(
             title: 'SUHub',
             debugShowCheckedModeBanner: false,

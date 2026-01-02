@@ -7,6 +7,7 @@ import '../../auth/providers/auth_provider.dart';
 import '../providers/posts_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../widgets/user_avatar.dart';
 
 class TopPostDetailScreen extends StatelessWidget {
   const TopPostDetailScreen({super.key});
@@ -162,18 +163,14 @@ class TopPostDetailScreen extends StatelessWidget {
                         // Header
                         Row(
                           children: [
-                            CircleAvatar(
+                            UserAvatar(
                               radius: 20,
+                              initials: post.authorUsername,
+                              imageUrl: post.authorPhotoUrl,
+                              alignX: post.authorPhotoAlignX,
+                              alignY: post.authorPhotoAlignY,
                               backgroundColor: colorScheme.surfaceVariant,
-                              child: Text(
-                                post.authorUsername.isNotEmpty
-                                    ? post.authorUsername[0].toUpperCase()
-                                    : 'U',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w800,
-                                  color: colorScheme.onSurface,
-                                ),
-                              ),
+                              textColor: colorScheme.onSurface,
                             ),
                             const SizedBox(width: 10),
                             Expanded(
@@ -386,12 +383,19 @@ class TopPostDetailScreen extends StatelessWidget {
                     enabled: user != null,
                     onSubmit: (text) async {
                       if (user == null) return;
-                      final username = auth.profile?.username ?? (user.email ?? 'user');
+                      final profile = auth.profile;
+                      final username = profile?.username ?? (user.email ?? 'user');
+                      final authorPhotoUrl = profile?.photoUrl ?? '';
+                      final authorPhotoAlignX = profile?.photoAlignX ?? 0.0;
+                      final authorPhotoAlignY = profile?.photoAlignY ?? 0.0;
                       await postsProvider.addComment(
                         postId: post.id,
                         text: text,
                         createdBy: user.uid,
                         authorUsername: username,
+                        authorPhotoUrl: authorPhotoUrl,
+                        authorPhotoAlignX: authorPhotoAlignX,
+                        authorPhotoAlignY: authorPhotoAlignY,
                       );
                       if (context.mounted) showError();
                     },

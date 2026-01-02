@@ -36,6 +36,9 @@ class PostsProvider extends ChangeNotifier {
     required String category,
     required String createdBy,
     required String authorUsername,
+    required String authorPhotoUrl,
+    required double authorPhotoAlignX,
+    required double authorPhotoAlignY,
   }) async {
     _busy = true;
     _error = null;
@@ -47,6 +50,9 @@ class PostsProvider extends ChangeNotifier {
         category: category,
         createdBy: createdBy,
         authorUsername: authorUsername,
+        authorPhotoUrl: authorPhotoUrl,
+        authorPhotoAlignX: authorPhotoAlignX,
+        authorPhotoAlignY: authorPhotoAlignY,
       );
     } catch (e) {
       _error = e.toString();
@@ -95,6 +101,9 @@ class PostsProvider extends ChangeNotifier {
     required String text,
     required String createdBy,
     required String authorUsername,
+    required String authorPhotoUrl,
+    required double authorPhotoAlignX,
+    required double authorPhotoAlignY,
   }) async {
     _busy = true;
     _error = null;
@@ -106,6 +115,9 @@ class PostsProvider extends ChangeNotifier {
         text: text,
         createdBy: createdBy,
         authorUsername: authorUsername,
+        authorPhotoUrl: authorPhotoUrl,
+        authorPhotoAlignX: authorPhotoAlignX,
+        authorPhotoAlignY: authorPhotoAlignY,
       );
     } catch (e) {
       _error = e.toString();

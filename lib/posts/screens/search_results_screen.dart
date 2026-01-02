@@ -6,6 +6,7 @@ import '../providers/posts_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/routes.dart';
+import '../../widgets/user_avatar.dart';
 
 class SearchResultsScreen extends StatelessWidget {
   final String query;
@@ -190,18 +191,14 @@ class _SearchPostCard extends StatelessWidget {
             // Header
             Row(
               children: [
-                CircleAvatar(
+                UserAvatar(
                   radius: 18,
+                  initials: post.authorUsername,
+                  imageUrl: post.authorPhotoUrl,
+                  alignX: post.authorPhotoAlignX,
+                  alignY: post.authorPhotoAlignY,
                   backgroundColor: colorScheme.surfaceVariant,
-                  child: Text(
-                    post.authorUsername.isNotEmpty
-                        ? post.authorUsername[0].toUpperCase()
-                        : 'U',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      color: colorScheme.onSurface,
-                    ),
-                  ),
+                  textColor: colorScheme.onSurface,
                 ),
                 const SizedBox(width: 10),
                 Expanded(

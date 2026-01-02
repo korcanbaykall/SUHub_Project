@@ -33,6 +33,9 @@ class AuthService {
       'username': username.trim(),
       'createdAt': FieldValue.serverTimestamp(),
       'role': role,
+      'photoUrl': '',
+      'photoAlignX': 0.0,
+      'photoAlignY': 0.0,
     });
   }
 
