@@ -9,8 +9,36 @@ import '../models/event.dart';
 import '../providers/events_provider.dart';
 import '../widgets/create_event_dialog.dart';
 
-class EventsScreen extends StatelessWidget {
+class EventsScreen extends StatefulWidget {
   const EventsScreen({super.key});
+
+  @override
+  State<EventsScreen> createState() => _EventsScreenState();
+}
+
+class _EventsScreenState extends State<EventsScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  String _query = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  List<Event> _filterEvents(List<Event> events, String query) {
+    final normalized = query.trim().toLowerCase();
+    if (normalized.isEmpty) return events;
+
+    return events.where((event) {
+      final title = event.title.toLowerCase();
+      final date = event.date.toLowerCase();
+      final details = event.details.toLowerCase();
+      return title.contains(normalized) ||
+          date.contains(normalized) ||
+          details.contains(normalized);
+    }).toList();
+  }
 
   Future<void> _openCreateDialog(BuildContext context) async {
     final events = context.read<EventsProvider>();
@@ -97,6 +125,7 @@ class EventsScreen extends StatelessWidget {
                 const SizedBox(height: 16),
 
                 TextField(
+                  controller: _searchController,
                   decoration: InputDecoration(
                     hintText: 'Search',
                     prefixIcon: const Icon(Icons.search),
@@ -116,6 +145,11 @@ class EventsScreen extends StatelessWidget {
                       borderSide: BorderSide(color: colorScheme.primary),
                     ),
                   ),
+                  onChanged: (value) {
+                    setState(() {
+                      _query = value;
+                    });
+                  },
                 ),
                 const SizedBox(height: 8),
 
@@ -166,10 +200,20 @@ class EventsScreen extends StatelessWidget {
                         );
                       }
 
+                      final filteredEvents = _filterEvents(events, _query);
+                      if (filteredEvents.isEmpty) {
+                        return const Center(
+                          child: Text(
+                            'No events match your search.',
+                            style: AppTextStyles.bodyWhite,
+                          ),
+                        );
+                      }
+
                       return ListView.builder(
-                        itemCount: events.length,
+                        itemCount: filteredEvents.length,
                         itemBuilder: (context, index) {
-                          final event = events[index];
+                          final event = filteredEvents[index];
                           return _EventCard(event: event);
                         },
                       );
