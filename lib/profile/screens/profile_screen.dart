@@ -234,6 +234,28 @@ class _LoggedInView extends StatelessWidget {
             ),
           ),
         ),
+        const SizedBox(height: 12),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                AppRoutes.myPosts,
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18),
+              ),
+            ),
+            child: const Text(
+              'My Posts',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+          ),
+        ),
 
 
         if (error != null) ...[

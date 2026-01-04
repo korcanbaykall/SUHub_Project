@@ -14,6 +14,7 @@ import '../categories/screens/category_post_detail_screen.dart';
 import '../categories/screens/generic_category_screen.dart';
 
 import '../profile/screens/edit_profile_screen.dart';
+import '../profile/screens/my_posts_screen.dart';
 
 class AppRoutes {
   // Auth / entry
@@ -34,6 +35,7 @@ class AppRoutes {
   static const genericCategory = '/generic-category';
 
   static const editProfile = '/edit-profile';
+  static const myPosts = '/my-posts';
 
 
   static Map<String, WidgetBuilder> routes = {
@@ -51,5 +53,6 @@ class AppRoutes {
     genericCategory: (context) => const GenericCategoryScreen(),
 
     editProfile: (_) => const EditProfileScreen(),
+    myPosts: (_) => const MyPostsScreen(),
   };
 }
