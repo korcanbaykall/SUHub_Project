@@ -6,6 +6,7 @@ import '../../auth/providers/auth_provider.dart' as app_auth;
 import '../../shell/providers/theme_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/routes.dart';
 import '../../widgets/user_avatar.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -363,6 +364,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ? null
                         : () async {
                       await auth.signOut();
+                      if (!mounted) return;
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        AppRoutes.signin,
+                        (route) => false,
+                      );
                     },
                     icon: const Icon(Icons.logout),
                     label: Text(
