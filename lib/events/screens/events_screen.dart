@@ -46,7 +46,7 @@ class _EventsScreenState extends State<EventsScreen> {
     final created = await showDialog<bool>(
       context: context,
       builder: (_) => CreateEventDialog(
-        onCreate: ({
+        onSubmit: ({
           required String title,
           required String date,
           required String imageUrl,
@@ -70,6 +70,75 @@ class _EventsScreenState extends State<EventsScreen> {
     }
   }
 
+  Future<void> _openEditDialog(BuildContext context, Event event) async {
+    final events = context.read<EventsProvider>();
+
+    final updated = await showDialog<bool>(
+      context: context,
+      builder: (_) => CreateEventDialog(
+        dialogTitle: 'Edit Event',
+        submitLabel: 'Save',
+        initialTitle: event.title,
+        initialDate: event.date,
+        initialImageUrl: event.imageUrl,
+        initialDetails: event.details,
+        onSubmit: ({
+          required String title,
+          required String date,
+          required String imageUrl,
+          required String details,
+        }) async {
+          await events.updateEvent(
+            id: event.id,
+            title: title,
+            date: date,
+            imageUrl: imageUrl,
+            details: details,
+          );
+        },
+      ),
+    );
+
+    if (!context.mounted) return;
+    if (updated == true && events.error != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(events.error!)),
+      );
+    }
+  }
+
+  Future<void> _confirmDelete(BuildContext context, Event event) async {
+    final events = context.read<EventsProvider>();
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Delete Event'),
+          content: Text('Delete "${event.title}"?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed != true) return;
+    await events.deleteEvent(event.id);
+    if (!context.mounted) return;
+    if (events.error != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(events.error!)),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
@@ -78,7 +147,6 @@ class _EventsScreenState extends State<EventsScreen> {
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final isAdmin = auth.profile?.role == 'admin';
-
 
     return Scaffold(
       body: Container(
@@ -225,7 +293,12 @@ class _EventsScreenState extends State<EventsScreen> {
                         itemCount: filteredEvents.length,
                         itemBuilder: (context, index) {
                           final event = filteredEvents[index];
-                          return _EventCard(event: event);
+                          return _EventCard(
+                            event: event,
+                            isAdmin: isAdmin,
+                            onEdit: () => _openEditDialog(context, event),
+                            onDelete: () => _confirmDelete(context, event),
+                          );
                         },
                       );
                     },
@@ -248,8 +321,16 @@ class _EventsScreenState extends State<EventsScreen> {
 
 class _EventCard extends StatelessWidget {
   final Event event;
+  final bool isAdmin;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
 
-  const _EventCard({required this.event});
+  const _EventCard({
+    required this.event,
+    required this.isAdmin,
+    required this.onEdit,
+    required this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -283,13 +364,43 @@ class _EventCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    event.title,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: colorScheme.onSurface,
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          event.title,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: colorScheme.onSurface,
+                          ),
+                        ),
+                      ),
+                      if (isAdmin)
+                        PopupMenuButton<String>(
+                          icon: Icon(
+                            Icons.more_vert,
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                          onSelected: (value) {
+                            if (value == 'edit') {
+                              onEdit();
+                            } else if (value == 'delete') {
+                              onDelete();
+                            }
+                          },
+                          itemBuilder: (context) => const [
+                            PopupMenuItem(
+                              value: 'edit',
+                              child: Text('Edit'),
+                            ),
+                            PopupMenuItem(
+                              value: 'delete',
+                              child: Text('Delete'),
+                            ),
+                          ],
+                        ),
+                    ],
                   ),
                   const SizedBox(height: 4),
                   Text(

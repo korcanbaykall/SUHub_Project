@@ -41,4 +41,46 @@ class EventsProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> updateEvent({
+    required String id,
+    required String title,
+    required String date,
+    required String imageUrl,
+    required String details,
+  }) async {
+    _busy = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      await _repo.updateEvent(
+        id: id,
+        title: title,
+        date: date,
+        imageUrl: imageUrl,
+        details: details,
+      );
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _busy = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> deleteEvent(String id) async {
+    _busy = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      await _repo.deleteEvent(id);
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _busy = false;
+      notifyListeners();
+    }
+  }
 }

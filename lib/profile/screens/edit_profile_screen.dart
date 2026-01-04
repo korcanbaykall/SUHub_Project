@@ -3,10 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../auth/providers/auth_provider.dart' as app_auth;
+import '../../auth/screens/auth_gate.dart';
 import '../../shell/providers/theme_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
-import '../../core/routes.dart';
 import '../../widgets/user_avatar.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -365,8 +365,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         : () async {
                       await auth.signOut();
                       if (!mounted) return;
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                        AppRoutes.signin,
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (_) => const AuthGate()),
                         (route) => false,
                       );
                     },

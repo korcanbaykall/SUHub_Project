@@ -32,4 +32,23 @@ class EventsRepository {
       'createdAt': FieldValue.serverTimestamp(),
     });
   }
+
+  Future<void> updateEvent({
+    required String id,
+    required String title,
+    required String date,
+    required String imageUrl,
+    required String details,
+  }) async {
+    await _db.collection('events').doc(id).update({
+      'title': title,
+      'date': date,
+      'imageUrl': imageUrl,
+      'details': details,
+    });
+  }
+
+  Future<void> deleteEvent(String id) async {
+    await _db.collection('events').doc(id).delete();
+  }
 }

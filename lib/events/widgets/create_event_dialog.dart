@@ -6,11 +6,23 @@ class CreateEventDialog extends StatefulWidget {
     required String date,
     required String imageUrl,
     required String details,
-  }) onCreate;
+  }) onSubmit;
+  final String dialogTitle;
+  final String submitLabel;
+  final String? initialTitle;
+  final String? initialDate;
+  final String? initialImageUrl;
+  final String? initialDetails;
 
   const CreateEventDialog({
     super.key,
-    required this.onCreate,
+    required this.onSubmit,
+    this.dialogTitle = 'Create Event',
+    this.submitLabel = 'Create',
+    this.initialTitle,
+    this.initialDate,
+    this.initialImageUrl,
+    this.initialDetails,
   });
 
   @override
@@ -23,6 +35,15 @@ class _CreateEventDialogState extends State<CreateEventDialog> {
   final TextEditingController _imageUrlController = TextEditingController();
   final TextEditingController _detailsController = TextEditingController();
   bool _submitting = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController.text = widget.initialTitle ?? '';
+    _dateController.text = widget.initialDate ?? '';
+    _imageUrlController.text = widget.initialImageUrl ?? '';
+    _detailsController.text = widget.initialDetails ?? '';
+  }
 
   String _formatDate(DateTime date) {
     final day = date.day.toString().padLeft(2, '0');
@@ -66,7 +87,7 @@ class _CreateEventDialogState extends State<CreateEventDialog> {
     if (_submitting) return;
     setState(() => _submitting = true);
 
-    await widget.onCreate(
+    await widget.onSubmit(
       title: title,
       date: date,
       imageUrl: imageUrl,
@@ -90,8 +111,8 @@ class _CreateEventDialogState extends State<CreateEventDialog> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Create Event',
+            Text(
+              widget.dialogTitle,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w800,
@@ -136,7 +157,9 @@ class _CreateEventDialogState extends State<CreateEventDialog> {
                 const SizedBox(width: 8),
                 ElevatedButton(
                   onPressed: _submitting ? null : _handleCreate,
-                  child: Text(_submitting ? 'Creating...' : 'Create'),
+                  child: Text(
+                    _submitting ? 'Saving...' : widget.submitLabel,
+                  ),
                 ),
               ],
             ),

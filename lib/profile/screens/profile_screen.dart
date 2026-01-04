@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../auth/providers/auth_provider.dart';
+import '../../auth/screens/auth_gate.dart';
 import '../../shell/providers/theme_provider.dart';
 import '../../core/routes.dart';
 import '../../widgets/user_avatar.dart';
@@ -14,8 +15,8 @@ class ProfileScreen extends StatelessWidget {
   Future<void> _logout(BuildContext context) async {
     await context.read<AuthProvider>().signOut();
     if (!context.mounted) return;
-    Navigator.of(context).pushNamedAndRemoveUntil(
-      AppRoutes.signin,
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const AuthGate()),
       (route) => false,
     );
   }
