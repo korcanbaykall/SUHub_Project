@@ -322,6 +322,19 @@ class _GenericCategoryScreenState extends State<GenericCategoryScreen> {
                                   ),
                                   const SizedBox(width: 12),
                                   Icon(
+                                    Icons.thumb_down_alt_outlined,
+                                    size: 18,
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    '${post.dislikes}',
+                                    style: TextStyle(
+                                      color: colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Icon(
                                     Icons.chat_bubble_outline,
                                     size: 18,
                                     color: colorScheme.onSurfaceVariant,

@@ -436,12 +436,21 @@ class TopPostDetailScreen extends StatelessWidget {
                       }
 
                       return Column(
-                        children: comments
-                            .map(
-                              (c) => Container(
+                        children: comments.map((c) {
+                          final isOwnerComment =
+                              userId.isNotEmpty && c.createdBy == userId;
+
+                          return Stack(
+                            children: [
+                              Container(
                                 width: double.infinity,
                                 margin: const EdgeInsets.only(bottom: 10),
-                                padding: const EdgeInsets.all(12),
+                                padding: EdgeInsets.fromLTRB(
+                                  12,
+                                  12,
+                                  isOwnerComment ? 40 : 12,
+                                  12,
+                                ),
                                 decoration: BoxDecoration(
                                   color: colorScheme.surface
                                       .withOpacity(isDark ? 0.94 : 0.97),
@@ -453,34 +462,12 @@ class TopPostDetailScreen extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            c.authorUsername,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              color: colorScheme.onSurface,
-                                            ),
-                                          ),
-                                        ),
-                                        if (userId.isNotEmpty &&
-                                            c.createdBy == userId)
-                                          IconButton(
-                                            icon: Icon(
-                                              Icons.delete_outline,
-                                              size: 18,
-                                              color: colorScheme.error,
-                                            ),
-                                            onPressed: () async {
-                                              await postsProvider.deleteComment(
-                                                postId: post.id,
-                                                commentId: c.id,
-                                              );
-                                              if (context.mounted) showError();
-                                            },
-                                          ),
-                                      ],
+                                    Text(
+                                      c.authorUsername,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        color: colorScheme.onSurface,
+                                      ),
                                     ),
                                     const SizedBox(height: 6),
                                     Text(
@@ -492,8 +479,30 @@ class TopPostDetailScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                            )
-                            .toList(),
+                              if (isOwnerComment)
+                                Positioned(
+                                  right: 6,
+                                  top: 6,
+                                  child: IconButton(
+                                    icon: Icon(
+                                      Icons.delete_outline,
+                                      size: 18,
+                                      color: colorScheme.error,
+                                    ),
+                                    padding: EdgeInsets.zero,
+                                    constraints: const BoxConstraints(),
+                                    onPressed: () async {
+                                      await postsProvider.deleteComment(
+                                        postId: post.id,
+                                        commentId: c.id,
+                                      );
+                                      if (context.mounted) showError();
+                                    },
+                                  ),
+                                ),
+                            ],
+                          );
+                        }).toList(),
                       );
                     },
                   ),
