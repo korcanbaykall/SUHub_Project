@@ -7,6 +7,7 @@ import '../../auth/providers/auth_provider.dart';
 import '../providers/posts_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../widgets/post_image.dart';
 import '../../widgets/user_avatar.dart';
 
 class TopPostDetailScreen extends StatelessWidget {
@@ -20,11 +21,13 @@ class TopPostDetailScreen extends StatelessWidget {
       builder: (_) => _EditPostDialog(
         initialText: post.text,
         initialCategory: post.category,
-        onSave: (text, category) async {
+        initialImageUrl: post.imageUrl,
+        onSave: (text, category, imageUrl) async {
           await postsProvider.updatePost(
             id: post.id,
             text: text,
             category: category,
+            imageUrl: imageUrl,
           );
         },
       ),
@@ -205,6 +208,15 @@ class TopPostDetailScreen extends StatelessWidget {
                         ),
 
                         const SizedBox(height: 14),
+
+                        if (post.imageUrl.isNotEmpty) ...[
+                          buildPostImage(
+                            imageUrl: post.imageUrl,
+                            height: 220,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          const SizedBox(height: 14),
+                        ],
 
                         // Content
                         Text(
@@ -577,11 +589,14 @@ class _CommentComposerState extends State<_CommentComposer> {
 class _EditPostDialog extends StatefulWidget {
   final String initialText;
   final String initialCategory;
-  final Future<void> Function(String text, String category) onSave;
+  final String initialImageUrl;
+  final Future<void> Function(String text, String category, String? imageUrl)
+      onSave;
 
   const _EditPostDialog({
     required this.initialText,
     required this.initialCategory,
+    required this.initialImageUrl,
     required this.onSave,
   });
 
@@ -591,6 +606,7 @@ class _EditPostDialog extends StatefulWidget {
 
 class _EditPostDialogState extends State<_EditPostDialog> {
   late final TextEditingController _textController;
+  late final TextEditingController _imageUrlController;
   late String _category;
   bool _saving = false;
 
@@ -598,12 +614,14 @@ class _EditPostDialogState extends State<_EditPostDialog> {
   void initState() {
     super.initState();
     _textController = TextEditingController(text: widget.initialText);
+    _imageUrlController = TextEditingController(text: widget.initialImageUrl);
     _category = widget.initialCategory;
   }
 
   @override
   void dispose() {
     _textController.dispose();
+    _imageUrlController.dispose();
     super.dispose();
   }
 
@@ -612,7 +630,12 @@ class _EditPostDialogState extends State<_EditPostDialog> {
     if (newText.isEmpty || _saving) return;
 
     setState(() => _saving = true);
-    await widget.onSave(newText, _category);
+    final imageUrl = _imageUrlController.text.trim();
+    await widget.onSave(
+      newText,
+      _category,
+      imageUrl.isEmpty ? null : imageUrl,
+    );
     if (!mounted) return;
     Navigator.of(context).pop(true);
   }
@@ -630,6 +653,14 @@ class _EditPostDialogState extends State<_EditPostDialog> {
             decoration: const InputDecoration(
               labelText: 'Text',
             ),
+          ),
+          const SizedBox(height: 10),
+          TextField(
+            controller: _imageUrlController,
+            decoration: const InputDecoration(
+              labelText: 'Image URL (optional)',
+            ),
+            keyboardType: TextInputType.url,
           ),
           const SizedBox(height: 10),
           DropdownButtonFormField<String>(

@@ -8,6 +8,7 @@ import '../../core/routes.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../widgets/create_post_dialog.dart';
+import '../../widgets/post_image.dart';
 import '../../widgets/user_avatar.dart';
 import '../../core/constants/post_categories.dart';
 
@@ -73,7 +74,7 @@ class _GenericCategoryScreenState extends State<GenericCategoryScreen> {
             context: context,
             builder: (_) => CreatePostDialog(
               presetCategory: categoryTitle,
-              onCreate: (text, _) async {
+              onCreate: (text, _, imageUrl) async {
                 await postsProvider.createPost(
                   text: text,
                   category: categoryTitle,
@@ -82,6 +83,7 @@ class _GenericCategoryScreenState extends State<GenericCategoryScreen> {
                   authorPhotoUrl: authorPhotoUrl,
                   authorPhotoAlignX: authorPhotoAlignX,
                   authorPhotoAlignY: authorPhotoAlignY,
+                  imageUrl: imageUrl,
                 );
               },
             ),
@@ -282,13 +284,22 @@ class _GenericCategoryScreenState extends State<GenericCategoryScreen> {
                                 ],
                               ),
 
-                              const SizedBox(height: 12),
+                        const SizedBox(height: 12),
 
-                              Text(
-                                post.text,
-                                style: TextStyle(
-                                  color: colorScheme.onSurface,
-                                  fontWeight: FontWeight.w600,
+                        if (post.imageUrl.isNotEmpty) ...[
+                          buildPostImage(
+                            imageUrl: post.imageUrl,
+                            height: 180,
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          const SizedBox(height: 12),
+                        ],
+
+                        Text(
+                          post.text,
+                          style: TextStyle(
+                            color: colorScheme.onSurface,
+                            fontWeight: FontWeight.w600,
                                   fontSize: 15,
                                 ),
                               ),

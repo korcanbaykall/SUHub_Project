@@ -9,6 +9,7 @@ class Post {
   final String authorPhotoUrl;
   final double authorPhotoAlignX;
   final double authorPhotoAlignY;
+  final String imageUrl;
   final int likes;
   final int dislikes;
   final int comments;
@@ -23,6 +24,7 @@ class Post {
     required this.authorPhotoUrl,
     required this.authorPhotoAlignX,
     required this.authorPhotoAlignY,
+    required this.imageUrl,
     required this.likes,
     required this.dislikes,
     required this.comments,
@@ -42,6 +44,7 @@ class Post {
       authorPhotoUrl: (data['authorPhotoUrl'] ?? '') as String,
       authorPhotoAlignX: alignX is num ? alignX.toDouble() : 0.0,
       authorPhotoAlignY: alignY is num ? alignY.toDouble() : 0.0,
+      imageUrl: (data['imageUrl'] ?? '') as String,
       likes: (data['likes'] ?? 0) as int,
       dislikes: (data['dislikes'] ?? 0) as int,
       comments: (data['comments'] ?? 0) as int,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../posts/models/post.dart';
+import 'post_image.dart';
 
 class PostCard extends StatelessWidget {
   final Post post;
@@ -37,6 +38,14 @@ class PostCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (post.imageUrl.isNotEmpty) ...[
+              buildPostImage(
+                imageUrl: post.imageUrl,
+                height: 160,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              const SizedBox(height: 10),
+            ],
             RichText(
               text: _highlightText(
                 post.text,

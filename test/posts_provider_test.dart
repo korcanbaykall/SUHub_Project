@@ -20,6 +20,10 @@ void main() {
           category: any(named: 'category'),
           createdBy: any(named: 'createdBy'),
           authorUsername: any(named: 'authorUsername'),
+          authorPhotoUrl: any(named: 'authorPhotoUrl'),
+          authorPhotoAlignX: any(named: 'authorPhotoAlignX'),
+          authorPhotoAlignY: any(named: 'authorPhotoAlignY'),
+          imageUrl: any(named: 'imageUrl'),
         )).thenAnswer((_) async {});
 
     final future = provider.createPost(
@@ -27,6 +31,10 @@ void main() {
       category: 'general',
       createdBy: 'uid',
       authorUsername: 'user',
+      authorPhotoUrl: '',
+      authorPhotoAlignX: 0.0,
+      authorPhotoAlignY: 0.0,
+      imageUrl: null,
     );
 
     expect(provider.busy, isTrue);
@@ -40,6 +48,10 @@ void main() {
           category: 'general',
           createdBy: 'uid',
           authorUsername: 'user',
+          authorPhotoUrl: '',
+          authorPhotoAlignX: 0.0,
+          authorPhotoAlignY: 0.0,
+          imageUrl: null,
         )).called(1);
   });
 
@@ -49,6 +61,10 @@ void main() {
           category: any(named: 'category'),
           createdBy: any(named: 'createdBy'),
           authorUsername: any(named: 'authorUsername'),
+          authorPhotoUrl: any(named: 'authorPhotoUrl'),
+          authorPhotoAlignX: any(named: 'authorPhotoAlignX'),
+          authorPhotoAlignY: any(named: 'authorPhotoAlignY'),
+          imageUrl: any(named: 'imageUrl'),
         )).thenThrow(Exception('boom'));
 
     await provider.createPost(
@@ -56,6 +72,10 @@ void main() {
       category: 'general',
       createdBy: 'uid',
       authorUsername: 'user',
+      authorPhotoUrl: '',
+      authorPhotoAlignX: 0.0,
+      authorPhotoAlignY: 0.0,
+      imageUrl: null,
     );
 
     expect(provider.busy, isFalse);

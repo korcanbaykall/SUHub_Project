@@ -2,15 +2,23 @@ import 'package:flutter/material.dart';
 
 class CreatePostDialog extends StatefulWidget {
   final String? presetCategory;
-  final Future<void> Function(String text, String category) onCreate;
+  final Future<void> Function(
+    String text,
+    String category,
+    String? imageUrl,
+  ) onCreate;
 
   final String? initialText;
+  final String? initialImageUrl;
+  final bool allowImage;
 
   const CreatePostDialog({
     super.key,
     required this.onCreate,
     this.presetCategory,
     this.initialText,
+    this.initialImageUrl,
+    this.allowImage = true,
   });
 
   @override
@@ -19,6 +27,7 @@ class CreatePostDialog extends StatefulWidget {
 
 class _CreatePostDialogState extends State<CreatePostDialog> {
   final TextEditingController _textController = TextEditingController();
+  final TextEditingController _imageUrlController = TextEditingController();
   String _category = 'Dormitories';
   bool _submitting = false;
 
@@ -37,12 +46,14 @@ class _CreatePostDialogState extends State<CreatePostDialog> {
   void initState() {
     super.initState();
     _textController.text = widget.initialText ?? '';
+    _imageUrlController.text = widget.initialImageUrl ?? '';
     _category = widget.presetCategory ?? 'Other';
   }
 
   @override
   void dispose() {
     _textController.dispose();
+    _imageUrlController.dispose();
     super.dispose();
   }
 
@@ -51,7 +62,15 @@ class _CreatePostDialogState extends State<CreatePostDialog> {
     if (text.isEmpty || _submitting) return;
 
     setState(() => _submitting = true);
-    await widget.onCreate(text, _category);
+    final imageUrl = widget.allowImage
+        ? _imageUrlController.text.trim()
+        : '';
+
+    await widget.onCreate(
+      text,
+      _category,
+      imageUrl.isEmpty ? null : imageUrl,
+    );
     if (!mounted) return;
     Navigator.of(context).pop();
   }
@@ -92,6 +111,17 @@ class _CreatePostDialogState extends State<CreatePostDialog> {
               ),
             ),
             const SizedBox(height: 14),
+
+            if (widget.allowImage) ...[
+              TextField(
+                controller: _imageUrlController,
+                decoration: const InputDecoration(
+                  labelText: 'Image URL (optional)',
+                ),
+                keyboardType: TextInputType.url,
+              ),
+              const SizedBox(height: 14),
+            ],
 
             if (widget.presetCategory != null) ...[
               Text(

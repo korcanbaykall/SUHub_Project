@@ -6,6 +6,7 @@ import '../../auth/providers/auth_provider.dart';
 import '../../posts/providers/posts_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../widgets/create_post_dialog.dart';
+import '../../widgets/post_image.dart';
 import '../../widgets/user_avatar.dart';
 
 class CategoryPostDetailScreen extends StatelessWidget {
@@ -120,6 +121,15 @@ class CategoryPostDetailScreen extends StatelessWidget {
 
                       const SizedBox(height: 12),
 
+                      if (post.imageUrl.isNotEmpty) ...[
+                        buildPostImage(
+                          imageUrl: post.imageUrl,
+                          height: 220,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        const SizedBox(height: 12),
+                      ],
+
                       Text(
                         post.text,
                         style: TextStyle(
@@ -212,12 +222,14 @@ class CategoryPostDetailScreen extends StatelessWidget {
                                 context: context,
                                 builder: (_) => CreatePostDialog(
                                   initialText: post.text,
+                                  initialImageUrl: post.imageUrl,
                                   presetCategory: post.category,
-                                  onCreate: (text, category) async {
+                                  onCreate: (text, category, imageUrl) async {
                                     await postsProvider.updatePost(
                                       id: post.id,
                                       text: text,
                                       category: category,
+                                      imageUrl: imageUrl,
                                     );
                                   },
                                 ),

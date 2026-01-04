@@ -71,6 +71,7 @@ class PostsRepository {
     required String authorPhotoUrl,
     required double authorPhotoAlignX,
     required double authorPhotoAlignY,
+    String? imageUrl,
   }) async {
     final doc = _db.collection('posts').doc();
     await doc.set({
@@ -82,6 +83,7 @@ class PostsRepository {
       'authorPhotoUrl': authorPhotoUrl,
       'authorPhotoAlignX': authorPhotoAlignX,
       'authorPhotoAlignY': authorPhotoAlignY,
+      'imageUrl': imageUrl ?? '',
       'likes': 0,
       'dislikes': 0,
       'comments': 0,
@@ -170,12 +172,17 @@ class PostsRepository {
     required String id,
     required String text,
     required String category,
+    String? imageUrl,
   }) async {
-    await _db.collection('posts').doc(id).update({
+    final update = {
       'text': text,
       'category': category,
       'updatedAt': FieldValue.serverTimestamp(),
-    });
+    };
+    if (imageUrl != null) {
+      update['imageUrl'] = imageUrl;
+    }
+    await _db.collection('posts').doc(id).update(update);
   }
 
   Future<void> deletePost(String id) async {

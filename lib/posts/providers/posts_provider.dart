@@ -39,6 +39,7 @@ class PostsProvider extends ChangeNotifier {
     required String authorPhotoUrl,
     required double authorPhotoAlignX,
     required double authorPhotoAlignY,
+    String? imageUrl,
   }) async {
     _busy = true;
     _error = null;
@@ -53,6 +54,7 @@ class PostsProvider extends ChangeNotifier {
         authorPhotoUrl: authorPhotoUrl,
         authorPhotoAlignX: authorPhotoAlignX,
         authorPhotoAlignY: authorPhotoAlignY,
+        imageUrl: imageUrl,
       );
     } catch (e) {
       _error = e.toString();
@@ -66,13 +68,19 @@ class PostsProvider extends ChangeNotifier {
     required String id,
     required String text,
     required String category,
+    String? imageUrl,
   }) async {
     _busy = true;
     _error = null;
     notifyListeners();
 
     try {
-      await _repo.updatePost(id: id, text: text, category: category);
+      await _repo.updatePost(
+        id: id,
+        text: text,
+        category: category,
+        imageUrl: imageUrl,
+      );
     } catch (e) {
       _error = e.toString();
     } finally {
@@ -164,4 +172,3 @@ class PostsProvider extends ChangeNotifier {
     }
   }
 }
-

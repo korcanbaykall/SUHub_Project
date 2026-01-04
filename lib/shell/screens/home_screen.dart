@@ -181,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       showDialog(
                         context: context,
                         builder: (_) => CreatePostDialog(
-                          onCreate: (text, category) async {
+                          onCreate: (text, category, imageUrl) async {
                             await posts.createPost(
                               text: text,
                               category: category,
@@ -190,6 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               authorPhotoUrl: authorPhotoUrl,
                               authorPhotoAlignX: authorPhotoAlignX,
                               authorPhotoAlignY: authorPhotoAlignY,
+                              imageUrl: imageUrl,
                             );
                           },
                         ),

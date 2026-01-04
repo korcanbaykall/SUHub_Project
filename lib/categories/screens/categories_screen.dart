@@ -141,7 +141,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       showDialog(
                         context: context,
                         builder: (_) => CreatePostDialog(
-                          onCreate: (text, category) async {
+                          onCreate: (text, category, imageUrl) async {
                             await postsProvider.createPost(
                               text: text,
                               category: category,
@@ -150,6 +150,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                               authorPhotoUrl: authorPhotoUrl,
                               authorPhotoAlignX: authorPhotoAlignX,
                               authorPhotoAlignY: authorPhotoAlignY,
+                              imageUrl: imageUrl,
                             );
                           },
                         ),

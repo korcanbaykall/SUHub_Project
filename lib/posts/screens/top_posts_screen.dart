@@ -8,6 +8,7 @@ import '../../core/routes.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../widgets/create_post_dialog.dart';
+import '../../widgets/post_image.dart';
 import '../../widgets/user_avatar.dart';
 
 class TopPostsScreen extends StatefulWidget {
@@ -52,7 +53,7 @@ class _TopPostsScreenState extends State<TopPostsScreen> {
     final created = await showDialog<bool>(
       context: context,
       builder: (_) => CreatePostDialog(
-        onCreate: (text, category) async {
+        onCreate: (text, category, imageUrl) async {
           await posts.createPost(
             text: text,
             category: category,
@@ -61,6 +62,7 @@ class _TopPostsScreenState extends State<TopPostsScreen> {
             authorPhotoUrl: authorPhotoUrl,
             authorPhotoAlignX: authorPhotoAlignX,
             authorPhotoAlignY: authorPhotoAlignY,
+            imageUrl: imageUrl,
           );
         },
       ),
@@ -305,6 +307,15 @@ class _PostCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 10),
+
+            if (post.imageUrl.isNotEmpty) ...[
+              buildPostImage(
+                imageUrl: post.imageUrl,
+                height: 180,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              const SizedBox(height: 12),
+            ],
 
             Text(
               post.text,
