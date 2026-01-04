@@ -58,6 +58,14 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void _logError(String action, Object error, StackTrace stack) {
+    if (!kDebugMode) {
+      return;
+    }
+    debugPrint('Auth error ($action): $error');
+    debugPrint(stack.toString());
+  }
+
   String _friendlyAuthError(Object e) {
     if (e is FirebaseAuthException) {
       switch (e.code) {
@@ -97,7 +105,8 @@ class AuthProvider extends ChangeNotifier {
         role: role,
       );
       return true;
-    } catch (e) {
+    } catch (e, stack) {
+      _logError('signUp', e, stack);
       _setError(_friendlyAuthError(e));
       return false;
     } finally {
@@ -116,7 +125,8 @@ class AuthProvider extends ChangeNotifier {
     try {
       await _authService.signIn(email: email, password: password);
       return true;
-    } catch (e) {
+    } catch (e, stack) {
+      _logError('signIn', e, stack);
       _setError(_friendlyAuthError(e));
       return false;
     } finally {
@@ -137,7 +147,8 @@ class AuthProvider extends ChangeNotifier {
 
     try {
       await _userRepo.updateUsername(_user!.uid, newUsername);
-    } catch (e) {
+    } catch (e, stack) {
+      _logError('updateUsername', e, stack);
       _setError('Username is not updated.');
     } finally {
       _isLoading = false;
@@ -163,7 +174,8 @@ class AuthProvider extends ChangeNotifier {
         photoAlignX: photoAlignX,
         photoAlignY: photoAlignY,
       );
-    } catch (e) {
+    } catch (e, stack) {
+      _logError('updateProfilePhoto', e, stack);
       _setError('Profile photo is not updated.');
     } finally {
       _isLoading = false;
@@ -192,7 +204,8 @@ class AuthProvider extends ChangeNotifier {
 
       await _user!.reauthenticateWithCredential(credential);
       await _user!.updatePassword(newPassword);
-    } catch (e) {
+    } catch (e, stack) {
+      _logError('changePassword', e, stack);
       _setError(_friendlyAuthError(e));
     } finally {
       _isLoading = false;
@@ -208,4 +221,3 @@ class AuthProvider extends ChangeNotifier {
     super.dispose();
   }
 }
-
