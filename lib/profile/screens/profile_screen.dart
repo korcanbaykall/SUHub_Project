@@ -12,8 +12,12 @@ class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   Future<void> _logout(BuildContext context) async {
-    Navigator.of(context).popUntil((route) => route.isFirst);
     await context.read<AuthProvider>().signOut();
+    if (!context.mounted) return;
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      AppRoutes.signin,
+      (route) => false,
+    );
   }
 
   @override
