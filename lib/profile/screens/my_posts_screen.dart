@@ -162,34 +162,64 @@ class MyPostsScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 12),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.thumb_up_alt_outlined,
-                              size: 18,
-                              color: colorScheme.onSurfaceVariant,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              '${post.likes}',
-                              style: TextStyle(
-                                color: colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Icon(
-                              Icons.chat_bubble_outline,
-                              size: 18,
-                              color: colorScheme.onSurfaceVariant,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              '${post.comments}',
-                              style: TextStyle(
-                                color: colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                          ],
+                        StreamBuilder<String?>(
+                          stream: postsProvider.reactionStream(post.id, user.uid),
+                          builder: (context, reactionSnap) {
+                            final reaction = reactionSnap.data;
+                            final liked = reaction == 'like';
+                            final disliked = reaction == 'dislike';
+
+                            return Row(
+                              children: [
+                                Icon(
+                                  liked
+                                      ? Icons.thumb_up_alt
+                                      : Icons.thumb_up_alt_outlined,
+                                  size: 18,
+                                  color: liked
+                                      ? colorScheme.primary
+                                      : colorScheme.onSurfaceVariant,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  '${post.likes}',
+                                  style: TextStyle(
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Icon(
+                                  disliked
+                                      ? Icons.thumb_down_alt
+                                      : Icons.thumb_down_alt_outlined,
+                                  size: 18,
+                                  color: disliked
+                                      ? colorScheme.error
+                                      : colorScheme.onSurfaceVariant,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  '${post.dislikes}',
+                                  style: TextStyle(
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Icon(
+                                  Icons.chat_bubble_outline,
+                                  size: 18,
+                                  color: colorScheme.onSurfaceVariant,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  '${post.comments}',
+                                  style: TextStyle(
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
                         ),
                       ],
                     ),

@@ -147,64 +147,83 @@ class CategoryPostDetailScreen extends StatelessWidget {
                         color: colorScheme.outline.withOpacity(0.35),
                       ),
 
-                      Row(
-                        children: [
-                          IconButton(
-                            icon: Icon(
-                              Icons.thumb_up_alt_outlined,
-                              color: colorScheme.onSurfaceVariant,
-                            ),
-                            onPressed: user == null
-                                ? null
-                                : () => postsProvider.toggleReaction(
-                              postId: post.id,
-                              uid: user.uid,
-                              type: 'like',
-                            ),
-                          ),
-                          Text(
-                            '${post.likes}',
-                            style: TextStyle(
-                              color: colorScheme.onSurfaceVariant,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          IconButton(
-                            icon: Icon(
-                              Icons.thumb_down_alt_outlined,
-                              color: colorScheme.onSurfaceVariant,
-                            ),
-                            onPressed: user == null
-                                ? null
-                                : () => postsProvider.toggleReaction(
-                              postId: post.id,
-                              uid: user.uid,
-                              type: 'dislike',
-                            ),
-                          ),
-                          Text(
-                            '${post.dislikes}',
-                            style: TextStyle(
-                              color: colorScheme.onSurfaceVariant,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(width: 14),
-                          Icon(
-                            Icons.chat_bubble_outline,
-                            size: 18,
-                            color: colorScheme.onSurfaceVariant,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            '${post.comments}',
-                            style: TextStyle(
-                              color: colorScheme.onSurfaceVariant,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
+                      StreamBuilder<String?>(
+                        stream: user == null
+                            ? const Stream<String?>.empty()
+                            : postsProvider.reactionStream(post.id, user.uid),
+                        builder: (context, reactionSnap) {
+                          final reaction = reactionSnap.data;
+                          final liked = reaction == 'like';
+                          final disliked = reaction == 'dislike';
+
+                          return Row(
+                            children: [
+                              IconButton(
+                                icon: Icon(
+                                  liked
+                                      ? Icons.thumb_up_alt
+                                      : Icons.thumb_up_alt_outlined,
+                                  color: liked
+                                      ? colorScheme.primary
+                                      : colorScheme.onSurfaceVariant,
+                                ),
+                                onPressed: user == null
+                                    ? null
+                                    : () => postsProvider.toggleReaction(
+                                          postId: post.id,
+                                          uid: user.uid,
+                                          type: 'like',
+                                        ),
+                              ),
+                              Text(
+                                '${post.likes}',
+                                style: TextStyle(
+                                  color: colorScheme.onSurfaceVariant,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              IconButton(
+                                icon: Icon(
+                                  disliked
+                                      ? Icons.thumb_down_alt
+                                      : Icons.thumb_down_alt_outlined,
+                                  color: disliked
+                                      ? colorScheme.error
+                                      : colorScheme.onSurfaceVariant,
+                                ),
+                                onPressed: user == null
+                                    ? null
+                                    : () => postsProvider.toggleReaction(
+                                          postId: post.id,
+                                          uid: user.uid,
+                                          type: 'dislike',
+                                        ),
+                              ),
+                              Text(
+                                '${post.dislikes}',
+                                style: TextStyle(
+                                  color: colorScheme.onSurfaceVariant,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(width: 14),
+                              Icon(
+                                Icons.chat_bubble_outline,
+                                size: 18,
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                '${post.comments}',
+                                style: TextStyle(
+                                  color: colorScheme.onSurfaceVariant,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ],
                   ),
