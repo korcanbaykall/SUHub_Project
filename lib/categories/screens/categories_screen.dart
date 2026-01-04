@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/routes.dart';
 import '../../posts/screens/search_results_screen.dart';
 import '../../core/constants/post_categories.dart';
+import '../../auth/providers/auth_provider.dart';
+import '../../posts/providers/posts_provider.dart';
+import '../../widgets/create_post_dialog.dart';
 
 
 class CategoriesScreen extends StatefulWidget {
@@ -87,9 +91,17 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = context.watch<AuthProvider>();
+    final postsProvider = context.watch<PostsProvider>();
     final size = MediaQuery.of(context).size;
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final user = auth.user;
+    final profile = auth.profile;
+    final username = profile?.username ?? user?.email ?? 'user';
+    final authorPhotoUrl = profile?.photoUrl ?? '';
+    final authorPhotoAlignX = profile?.photoAlignX ?? 0.0;
+    final authorPhotoAlignY = profile?.photoAlignY ?? 0.0;
 
     return Container(
       width: size.width,
@@ -114,15 +126,45 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     'Categories',
                     style: AppTextStyles.appTitle.copyWith(fontSize: 26),
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: isDark ? Colors.black : Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Image.asset(
-                      'assets/images/logo.png',
-                      height: 60,
+                  InkWell(
+                    borderRadius: BorderRadius.circular(999),
+                    onTap: () {
+                      if (user == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please log in to create a post.'),
+                          ),
+                        );
+                        return;
+                      }
+
+                      showDialog(
+                        context: context,
+                        builder: (_) => CreatePostDialog(
+                          onCreate: (text, category) async {
+                            await postsProvider.createPost(
+                              text: text,
+                              category: category,
+                              createdBy: user.uid,
+                              authorUsername: username,
+                              authorPhotoUrl: authorPhotoUrl,
+                              authorPhotoAlignX: authorPhotoAlignX,
+                              authorPhotoAlignY: authorPhotoAlignY,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: isDark ? Colors.black : Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                        height: 60,
+                      ),
                     ),
                   ),
                 ],

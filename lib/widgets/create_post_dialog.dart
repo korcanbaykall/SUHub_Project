@@ -82,8 +82,13 @@ class _CreatePostDialogState extends State<CreatePostDialog> {
             TextField(
               controller: _textController,
               maxLines: 3,
+              minLines: 1,
               decoration: const InputDecoration(
                 labelText: 'Text',
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+                alignLabelWithHint: true,
+                isDense: true,
+                contentPadding: EdgeInsets.only(top: 2, bottom: 2),
               ),
             ),
             const SizedBox(height: 14),
