@@ -11,8 +11,21 @@ import '../../posts/screens/search_results_screen.dart';
 
 
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   void _handleCardTap(BuildContext context, String title) {
     if (title == 'Top Posts of Today') {
@@ -60,9 +73,19 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               TextField(
+                controller: _searchController,
                 decoration: InputDecoration(
                   hintText: 'Search',
                   prefixIcon: const Icon(Icons.search),
+                  suffixIcon: _searchController.text.isEmpty
+                      ? null
+                      : IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () {
+                            _searchController.clear();
+                            setState(() {});
+                          },
+                        ),
                   filled: true,
                   fillColor:
                       colorScheme.surface.withOpacity(isDark ? 0.9 : 0.98),
@@ -79,6 +102,7 @@ class HomeScreen extends StatelessWidget {
                     borderSide: BorderSide(color: colorScheme.primary),
                   ),
                 ),
+                onChanged: (_) => setState(() {}),
                 onSubmitted: (query) {
                   final q = query.trim();
                   if (q.isEmpty) return;

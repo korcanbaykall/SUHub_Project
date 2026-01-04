@@ -10,8 +10,33 @@ import '../../core/theme/app_text_styles.dart';
 import '../../widgets/create_post_dialog.dart';
 import '../../widgets/user_avatar.dart';
 
-class TopPostsScreen extends StatelessWidget {
+class TopPostsScreen extends StatefulWidget {
   const TopPostsScreen({super.key});
+
+  @override
+  State<TopPostsScreen> createState() => _TopPostsScreenState();
+}
+
+class _TopPostsScreenState extends State<TopPostsScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  String _query = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  List<Post> _filterPosts(List<Post> posts, String query) {
+    final normalized = query.trim().toLowerCase();
+    if (normalized.isEmpty) return posts;
+
+    return posts.where((post) {
+      return post.text.toLowerCase().contains(normalized) ||
+          post.authorUsername.toLowerCase().contains(normalized) ||
+          post.category.toLowerCase().contains(normalized);
+    }).toList();
+  }
 
   Future<void> _openCreateDialog(BuildContext context) async {
     final auth = context.read<AuthProvider>();
@@ -77,57 +102,114 @@ class TopPostsScreen extends StatelessWidget {
             end: Alignment.bottomCenter,
           ),
         ),
-        child: StreamBuilder<List<Post>>(
-          stream: postsProvider.topPostsStream(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                  'Error: ${snapshot.error}',
-                  style: AppTextStyles.bodyWhite,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: 'Search',
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: _searchController.text.isEmpty
+                      ? null
+                      : IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () {
+                            _searchController.clear();
+                            setState(() {
+                              _query = '';
+                            });
+                          },
+                        ),
+                  filled: true,
+                  fillColor:
+                      colorScheme.surface.withOpacity(isDark ? 0.9 : 0.98),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 12,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(18),
+                    borderSide: const BorderSide(color: Colors.transparent),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(18),
+                    borderSide: BorderSide(color: colorScheme.primary),
+                  ),
                 ),
-              );
-            }
-
-            if (!snapshot.hasData) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            final posts = snapshot.data!;
-            if (posts.isEmpty) {
-              return const Center(
-                child: Text(
-                  'No posts yet. Create the first one!',
-                  style: AppTextStyles.bodyWhite,
-                ),
-              );
-            }
-
-            return ListView.separated(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-              itemCount: posts.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
-              itemBuilder: (context, i) {
-                final p = posts[i];
-                final isOwner = p.createdBy == user.uid;
-
-                return _PostCard(
-                  post: p,
-                  isOwner: isOwner,
-                  colorScheme: colorScheme,
-                  isDark: isDark,
-                  userId: user.uid,
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      AppRoutes.topPostDetail,
-                      arguments: p.id,
+                onChanged: (value) {
+                  setState(() {
+                    _query = value;
+                  });
+                },
+              ),
+            ),
+            Expanded(
+              child: StreamBuilder<List<Post>>(
+                stream: postsProvider.topPostsStream(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        'Error: ${snapshot.error}',
+                        style: AppTextStyles.bodyWhite,
+                      ),
                     );
-                  },
-                );
-              },
-            );
-          },
+                  }
+
+                  if (!snapshot.hasData) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  final posts = snapshot.data!;
+                  if (posts.isEmpty) {
+                    return const Center(
+                      child: Text(
+                        'No posts yet. Create the first one!',
+                        style: AppTextStyles.bodyWhite,
+                      ),
+                    );
+                  }
+
+                  final filteredPosts = _filterPosts(posts, _query);
+                  if (filteredPosts.isEmpty) {
+                    return const Center(
+                      child: Text(
+                        'No posts match your search.',
+                        style: AppTextStyles.bodyWhite,
+                      ),
+                    );
+                  }
+
+                  return ListView.separated(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                    itemCount: filteredPosts.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: 12),
+                    itemBuilder: (context, i) {
+                      final p = filteredPosts[i];
+                      final isOwner = p.createdBy == user.uid;
+
+                      return _PostCard(
+                        post: p,
+                        isOwner: isOwner,
+                        colorScheme: colorScheme,
+                        isDark: isDark,
+                        userId: user.uid,
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            AppRoutes.topPostDetail,
+                            arguments: p.id,
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(

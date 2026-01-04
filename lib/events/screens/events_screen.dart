@@ -129,6 +129,17 @@ class _EventsScreenState extends State<EventsScreen> {
                   decoration: InputDecoration(
                     hintText: 'Search',
                     prefixIcon: const Icon(Icons.search),
+                    suffixIcon: _searchController.text.isEmpty
+                        ? null
+                        : IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () {
+                              _searchController.clear();
+                              setState(() {
+                                _query = '';
+                              });
+                            },
+                          ),
                     filled: true,
                     fillColor:
                         colorScheme.surface.withOpacity(isDark ? 0.9 : 0.98),

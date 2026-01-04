@@ -6,7 +6,15 @@ import '../../posts/screens/search_results_screen.dart';
 import '../../core/constants/post_categories.dart';
 
 
-class CategoriesScreen extends StatelessWidget {
+class CategoriesScreen extends StatefulWidget {
+  const CategoriesScreen({super.key});
+
+  @override
+  State<CategoriesScreen> createState() => _CategoriesScreenState();
+}
+
+class _CategoriesScreenState extends State<CategoriesScreen> {
+  final TextEditingController _searchController = TextEditingController();
 
   final categories = <Map<String, dynamic>>[
     {
@@ -72,6 +80,12 @@ class CategoriesScreen extends StatelessWidget {
   ];
 
   @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final colorScheme = Theme.of(context).colorScheme;
@@ -116,9 +130,19 @@ class CategoriesScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               TextField(
+                controller: _searchController,
                 decoration: InputDecoration(
                   hintText: 'Search',
                   prefixIcon: const Icon(Icons.search),
+                  suffixIcon: _searchController.text.isEmpty
+                      ? null
+                      : IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () {
+                            _searchController.clear();
+                            setState(() {});
+                          },
+                        ),
                   filled: true,
                   fillColor:
                       colorScheme.surface.withOpacity(isDark ? 0.9 : 0.98),
@@ -135,6 +159,7 @@ class CategoriesScreen extends StatelessWidget {
                     borderSide: BorderSide(color: colorScheme.primary),
                   ),
                 ),
+                onChanged: (_) => setState(() {}),
                 onSubmitted: (query) {
                   final q = query.trim();
                   if (q.isEmpty) return;
